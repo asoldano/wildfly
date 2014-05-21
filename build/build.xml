@@ -651,7 +651,7 @@
         </module-def>
 
         <module-def name="org.apache.cxf">
-            <maven-resource group="org.apache.cxf" artifact="cxf-api"/>
+            <maven-resource group="org.apache.cxf" artifact="cxf-core"/>
         </module-def>
 
         <module-def name="org.apache.cxf.impl">
@@ -659,15 +659,16 @@
             <maven-resource group="org.apache.cxf" artifact="cxf-rt-bindings-object"/>
             <maven-resource group="org.apache.cxf" artifact="cxf-rt-bindings-soap"/>
             <maven-resource group="org.apache.cxf" artifact="cxf-rt-bindings-xml"/>
-            <maven-resource group="org.apache.cxf" artifact="cxf-rt-core"/>
             <maven-resource group="org.apache.cxf" artifact="cxf-rt-databinding-aegis"/>
             <maven-resource group="org.apache.cxf" artifact="cxf-rt-databinding-jaxb"/>
             <maven-resource group="org.apache.cxf" artifact="cxf-rt-frontend-jaxws"/>
             <maven-resource group="org.apache.cxf" artifact="cxf-rt-frontend-simple"/>
             <maven-resource group="org.apache.cxf" artifact="cxf-rt-management"/>
+            <maven-resource group="org.apache.cxf" artifact="cxf-rt-security" jandex="true"/>
             <maven-resource group="org.apache.cxf" artifact="cxf-rt-transports-http"/>
             <maven-resource group="org.apache.cxf" artifact="cxf-rt-transports-jms"/>
             <maven-resource group="org.apache.cxf" artifact="cxf-rt-transports-local"/>
+            <maven-resource group="org.apache.cxf" artifact="cxf-rt-wsdl"/>
             <maven-resource group="org.apache.cxf" artifact="cxf-rt-ws-addr"/>
             <maven-resource group="org.apache.cxf" artifact="cxf-rt-ws-mex"/>
             <maven-resource group="org.apache.cxf" artifact="cxf-rt-ws-policy"/>
@@ -740,7 +741,13 @@
         </module-def>
 
         <module-def name="org.apache.ws.security">
-            <maven-resource group="org.apache.ws.security" artifact="wss4j"/>
+            <maven-resource group="org.apache.wss4j" artifact="wss4j-bindings"/>
+            <maven-resource group="org.apache.wss4j" artifact="wss4j-policy"/>
+            <maven-resource group="org.apache.wss4j" artifact="wss4j-ws-security-common"/>
+            <maven-resource group="org.apache.wss4j" artifact="wss4j-ws-security-dom"/>
+            <maven-resource group="org.apache.wss4j" artifact="wss4j-ws-security-policy-stax"/>
+            <maven-resource group="org.apache.wss4j" artifact="wss4j-ws-security-stax"/>
+            <maven-resource group="org.jasypt" artifact="jasypt"/>
         </module-def>
 
         <module-def name="org.bouncycastle">
