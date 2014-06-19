@@ -6020,6 +6020,10 @@
                         <artifactId>FastInfoset</artifactId>
                     </exclusion>
                     <exclusion>
+                        <groupId>com.sun.xml.bind</groupId>
+                        <artifactId>jaxb-core</artifactId>
+                    </exclusion>
+                    <exclusion>
                         <groupId>javax.xml.stream</groupId>
                         <artifactId>stax-api</artifactId>
                     </exclusion>
@@ -6230,6 +6234,10 @@
                     <exclusion>
                         <groupId>com.sun.xml.fastinfoset</groupId>
                         <artifactId>FastInfoset</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.sun.xml.bind</groupId>
+                        <artifactId>jaxb-core</artifactId>
                     </exclusion>
                     <exclusion>
                         <groupId>com.sun.xml.bind</groupId>
