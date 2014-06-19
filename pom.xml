@@ -108,7 +108,7 @@
         <version.io.undertow>1.1.0.Beta1</version.io.undertow>
         <version.io.undertow.jastow>1.0.0.Final</version.io.undertow.jastow>
         <version.javax.activation>1.1.1</version.javax.activation>
-        <version.javax.enterprise>1.1</version.javax.enterprise>
+        <version.javax.enterprise>1.2</version.javax.enterprise>
         <version.javax.inject.javax.inject>1</version.javax.inject.javax.inject>
         <version.javax.jws.jsr181-api>1.0-MR1</version.javax.jws.jsr181-api>
         <version.javax.mail>1.5.1</version.javax.mail>
@@ -123,8 +123,8 @@
         <version.net.jcip>1.0</version.net.jcip>
         <version.org.apache.ant>1.8.2</version.org.apache.ant>
         <version.org.apache.avro>1.7.6</version.org.apache.avro>
-        <version.org.apache.cxf>2.7.11</version.org.apache.cxf>
-        <version.org.apache.cxf.xjcplugins>2.6.1</version.org.apache.cxf.xjcplugins>
+        <version.org.apache.cxf>3.0.0</version.org.apache.cxf>
+        <version.org.apache.cxf.xjcplugins>2.7.0</version.org.apache.cxf.xjcplugins>
         <version.org.apache.ds>2.0.0-M15</version.org.apache.ds>
         <version.org.apache.httpcomponents.httpclient>4.2.1</version.org.apache.httpcomponents.httpclient>
         <version.org.apache.httpcomponents.httpcore>4.2.1</version.org.apache.httpcomponents.httpcore>
@@ -132,11 +132,11 @@
         <version.org.apache.maven>3.1.1</version.org.apache.maven>
         <version.org.apache.lucene>3.6.2</version.org.apache.lucene>
         <version.org.apache.myfaces.core>2.1.8</version.org.apache.myfaces.core>
-        <version.org.apache.neethi>3.0.2</version.org.apache.neethi>
+        <version.org.apache.neethi>3.0.3</version.org.apache.neethi>
         <version.org.apache.qpid.proton>0.4</version.org.apache.qpid.proton>
-        <version.org.apache.santuario>1.5.6</version.org.apache.santuario>
+        <version.org.apache.santuario>2.0.0</version.org.apache.santuario>
         <version.org.apache.velocity>1.7</version.org.apache.velocity>
-        <version.org.apache.ws.security>1.6.15</version.org.apache.ws.security>
+        <version.org.apache.ws.security>2.0.0</version.org.apache.ws.security>
         <version.org.apache.ws.xmlschema>2.0.2</version.org.apache.ws.xmlschema>
         <version.org.apache.xalan>2.7.1.jbossorg-1</version.org.apache.xalan>
         <version.org.apache.xerces>2.9.1-jbossas-2</version.org.apache.xerces>
@@ -160,6 +160,7 @@
         <version.org.hornetq>2.4.1.Final</version.org.hornetq>
         <version.org.infinispan>6.0.2.Final</version.org.infinispan>
         <version.org.jacorb>2.3.2-jbossorg-5</version.org.jacorb>
+        <version.org.jasypt>1.9.1</version.org.jasypt>
         <version.org.javassist>3.18.1-GA</version.org.javassist>
         <version.org.jberet>1.0.2.Final</version.org.jberet>
         <version.org.jdom>1.1.2</version.org.jdom>
@@ -176,9 +177,9 @@
         <version.org.jboss.ejb3.ext-api>2.1.0</version.org.jboss.ejb3.ext-api>
         <version.org.jboss.genericjms>1.0.5.Final</version.org.jboss.genericjms>
         <version.org.jboss.iiop-client>1.0.0.Final</version.org.jboss.iiop-client>
-        <version.org.jboss.invocation>1.2.1.Final</version.org.jboss.invocation>
+        <version.org.jboss.invocation>1.3.0.Beta1</version.org.jboss.invocation>
         <version.org.jboss.ironjacamar>1.2.0.Beta1</version.org.jboss.ironjacamar>
-        <version.org.jboss.jandex>1.1.0.Final</version.org.jboss.jandex>
+        <version.org.jboss.jandex>1.2.1.Final</version.org.jboss.jandex>
         <version.org.jboss.jboss-dmr>1.2.0.Final</version.org.jboss.jboss-dmr>
         <version.org.jboss.jboss-transaction-spi>7.1.0.Final</version.org.jboss.jboss-transaction-spi>
         <version.org.jboss.jboss-vfs>3.2.5.Final</version.org.jboss.jboss-vfs>
@@ -231,13 +232,13 @@
         <version.org.jboss.staxmapper>1.1.0.Final</version.org.jboss.staxmapper>
         <version.org.jboss.stdio>1.0.2.GA</version.org.jboss.stdio>
         <version.org.jboss.threads>2.1.1.Final</version.org.jboss.threads>
-        <version.org.jboss.weld.weld>2.1.2.Final</version.org.jboss.weld.weld>
-        <version.org.jboss.weld.weld-api>2.1.Final</version.org.jboss.weld.weld-api>
+        <version.org.jboss.weld.weld>2.2.1.Final</version.org.jboss.weld.weld>
+        <version.org.jboss.weld.weld-api>2.2.SP1</version.org.jboss.weld.weld-api>
         <version.org.jboss.ws.api>1.0.2.Final</version.org.jboss.ws.api>
-        <version.org.jboss.ws.spi>2.3.0.Final</version.org.jboss.ws.spi>
-        <version.org.jboss.ws.common>2.3.0.Final</version.org.jboss.ws.common>
+        <version.org.jboss.ws.spi>3.0.0-SNAPSHOT</version.org.jboss.ws.spi>
+        <version.org.jboss.ws.common>3.0.0-SNAPSHOT</version.org.jboss.ws.common>
         <version.org.jboss.ws.common.tools>1.2.0.Final</version.org.jboss.ws.common.tools>
-        <version.org.jboss.ws.cxf>4.3.0.Final</version.org.jboss.ws.cxf>
+        <version.org.jboss.ws.cxf>5.0.0-SNAPSHOT</version.org.jboss.ws.cxf>
         <version.org.jboss.ws.jaxws-undertow-httpspi>1.0.1.Beta1</version.org.jboss.ws.jaxws-undertow-httpspi>
         <version.org.jboss.xb>2.0.3.GA</version.org.jboss.xb>
         <version.org.jboss.xnio>3.3.0.Beta1</version.org.jboss.xnio>
@@ -247,9 +248,9 @@
         <version.org.jipijapa>1.0.1.Final</version.org.jipijapa>
         <version.org.kohsuke.rngom>201103.jboss-1</version.org.kohsuke.rngom>
         <version.org.mockito>1.9.5</version.org.mockito>
-        <version.org.opensaml.opensaml>2.5.3</version.org.opensaml.opensaml>
-        <version.org.opensaml.openws>1.4.4</version.org.opensaml.openws>
-        <version.org.opensaml.xmltooling>1.3.4</version.org.opensaml.xmltooling>
+        <version.org.opensaml.opensaml>2.6.0</version.org.opensaml.opensaml>
+        <version.org.opensaml.openws>1.5.0</version.org.opensaml.openws>
+        <version.org.opensaml.xmltooling>1.4.0</version.org.opensaml.xmltooling>
         <version.org.picketbox>4.0.21.Beta3</version.org.picketbox>
         <version.org.picketbox.picketbox-commons>1.0.0.final</version.org.picketbox.picketbox-commons>
         <version.org.picketlink>2.6.0.CR2</version.org.picketlink>
@@ -1791,6 +1792,12 @@
             </dependency>
 
             <dependency>
+                <groupId>org.jasypt</groupId>
+                <artifactId>jasypt</artifactId>
+                <version>${version.org.jasypt}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.javassist</groupId>
                 <artifactId>javassist</artifactId>
                 <version>${version.org.javassist}</version>
@@ -1808,20 +1815,12 @@
                 <version>${version.javax.enterprise}</version>
                 <exclusions>
                     <exclusion>
-                        <groupId>org.jboss.spec.javax.interceptor</groupId>
-                        <artifactId>jboss-interceptors-api_1.1_spec</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>javax.annotation</groupId>
-                        <artifactId>jsr250-api</artifactId>
+                        <groupId>javax.interceptor</groupId>
+                        <artifactId>javax.interceptor-api</artifactId>
                     </exclusion>
                     <exclusion>
                         <groupId>javax.el</groupId>
-                        <artifactId>el-api</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.jboss.spec.javax.ejb</groupId>
-                        <artifactId>jboss-ejb-api_3.1_spec</artifactId>
+                        <artifactId>javax.el-api</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -2027,29 +2026,15 @@
             </dependency>
 
             <dependency>
-                <groupId>org.apache.cxf</groupId>
-                <artifactId>cxf-api</artifactId>
-                <version>${version.org.apache.cxf}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.apache.geronimo.specs</groupId>
-                        <artifactId>geronimo-javamail_1.4_spec</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.ws.xmlschema</groupId>
-                        <artifactId>xmlschema-core</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.neethi</groupId>
-                        <artifactId>neethi</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <dependency>
                 <groupId>org.apache.cxf.services.sts</groupId>
                 <artifactId>cxf-services-sts-core</artifactId>
                 <version>${version.org.apache.cxf}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-context</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
@@ -2071,7 +2056,7 @@
                 <exclusions>
                     <exclusion>
                         <groupId>org.apache.cxf</groupId>
-                        <artifactId>cxf-rt-core</artifactId>
+                        <artifactId>cxf-core</artifactId>
                     </exclusion>
                     <exclusion>
                         <groupId>org.apache.geronimo.specs</groupId>
@@ -2182,7 +2167,7 @@
 
             <dependency>
                 <groupId>org.apache.cxf</groupId>
-                <artifactId>cxf-rt-core</artifactId>
+                <artifactId>cxf-core</artifactId>
                 <version>${version.org.apache.cxf}</version>
                 <exclusions>
                     <exclusion>
@@ -2203,7 +2188,7 @@
                 <exclusions>
                     <exclusion>
                         <groupId>org.apache.cxf</groupId>
-                        <artifactId>cxf-rt-core</artifactId>
+                        <artifactId>cxf-core</artifactId>
                     </exclusion>
                     <exclusion>
                         <groupId>org.apache.cxf</groupId>
@@ -2233,7 +2218,7 @@
                     </exclusion>
                     <exclusion>
                         <groupId>org.apache.cxf</groupId>
-                        <artifactId>cxf-rt-core</artifactId>
+                        <artifactId>cxf-core</artifactId>
                     </exclusion>
                     <exclusion>
                         <groupId>org.apache.cxf</groupId>
@@ -2315,7 +2300,7 @@
                 <exclusions>
                     <exclusion>
                         <groupId>org.apache.cxf</groupId>
-                        <artifactId>cxf-rt-core</artifactId>
+                        <artifactId>cxf-core</artifactId>
                     </exclusion>
                     <exclusion>
                         <groupId>org.springframework</groupId>
@@ -2348,6 +2333,18 @@
                     <exclusion>
                          <groupId>org.springframework</groupId>
                          <artifactId>spring-jms</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-security</artifactId>
+                <version>${version.org.apache.cxf}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.cxf</groupId>
+                        <artifactId>cxf-core</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -2407,7 +2404,7 @@
                 <exclusions>
                     <exclusion>
                         <groupId>org.apache.cxf</groupId>
-                        <artifactId>cxf-rt-core</artifactId>
+                        <artifactId>cxf-core</artifactId>
                     </exclusion>
                     <exclusion>
                         <groupId>commons-pool</groupId>
@@ -2424,6 +2421,10 @@
                     <exclusion>
                         <groupId>org.apache.geronimo.specs</groupId>
                         <artifactId>geronimo-jms_1.1_spec</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.geronimo.specs</groupId>
+                        <artifactId>geronimo-jta_1.1_spec</artifactId>
                     </exclusion>
                     <exclusion>
                         <groupId>org.springframework</groupId>
@@ -2467,7 +2468,19 @@
                 <exclusions>
                     <exclusion>
                         <groupId>org.apache.cxf</groupId>
-                        <artifactId>cxf-rt-core</artifactId>
+                        <artifactId>cxf-core</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-wsdl</artifactId>
+                <version>${version.org.apache.cxf}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.cxf</groupId>
+                        <artifactId>cxf-core</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -2495,7 +2508,7 @@
                     </exclusion>
                     <exclusion>
                         <groupId>org.apache.cxf</groupId>
-                        <artifactId>cxf-rt-core</artifactId>
+                        <artifactId>cxf-core</artifactId>
                     </exclusion>
                     <exclusion>
                         <groupId>org.apache.cxf</groupId>
@@ -2559,7 +2572,7 @@
                     </exclusion>
                     <exclusion>
                         <groupId>org.apache.cxf</groupId>
-                        <artifactId>cxf-rt-core</artifactId>
+                        <artifactId>cxf-core</artifactId>
                     </exclusion>
                     <exclusion>
                         <groupId>org.apache.geronimo.specs</groupId>
@@ -2619,27 +2632,47 @@
                     </exclusion>
                     <exclusion>
                         <groupId>org.apache.cxf</groupId>
-                        <artifactId>cxf-rt-ws-security</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.cxf</groupId>
                         <artifactId>cxf-rt-bindings-soap</artifactId>
                     </exclusion>
                     <exclusion>
                         <groupId>org.apache.cxf</groupId>
-                        <artifactId>cxf-rt-core</artifactId>
+                        <artifactId>cxf-core</artifactId>
                     </exclusion>
                     <exclusion>
                         <groupId>javax.xml.soap</groupId>
                         <artifactId>saaj-api</artifactId>
                     </exclusion>
                     <exclusion>
-                        <groupId>org.apache.ws.security</groupId>
-                        <artifactId>wss4j</artifactId>
+                        <groupId>org.apache.wss4j</groupId>
+                        <artifactId>wss4j-bindings</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.wss4j</groupId>
+                        <artifactId>wss4j-ws-security-common</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.wss4j</groupId>
+                        <artifactId>wss4j-ws-security-dom</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.wss4j</groupId>
+                        <artifactId>wss4j-ws-security-stax</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.wss4j</groupId>
+                        <artifactId>wss4j-policy</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.wss4j</groupId>
+                        <artifactId>wss4j-ws-security-policy-stax</artifactId>
                     </exclusion>
                     <exclusion>
                         <groupId>commons-logging</groupId>
                         <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>net.sf.ehcache</groupId>
+                        <artifactId>ehcache</artifactId>
                     </exclusion>
                     <exclusion>
                         <groupId>org.bouncycastle</groupId>
@@ -2675,7 +2708,7 @@
                     </exclusion>
                     <exclusion>
                         <groupId>org.apache.cxf</groupId>
-                        <artifactId>cxf-rt-core</artifactId>
+                        <artifactId>cxf-core</artifactId>
                     </exclusion>
                     <exclusion>
                         <groupId>org.apache.cxf</groupId>
@@ -2767,7 +2800,7 @@
                     </exclusion>
                     <exclusion>
                         <groupId>org.apache.cxf</groupId>
-                        <artifactId>cxf-rt-core</artifactId>
+                        <artifactId>cxf-core</artifactId>
                     </exclusion>
                     <exclusion>
                         <groupId>org.apache.cxf</groupId>
@@ -2867,7 +2900,7 @@
                     </exclusion>
                     <exclusion>
                         <groupId>org.apache.cxf</groupId>
-                        <artifactId>cxf-rt-core</artifactId>
+                        <artifactId>cxf-core</artifactId>
                     </exclusion>
                     <exclusion>
                         <groupId>org.apache.cxf</groupId>
@@ -2979,7 +3012,7 @@
                     </exclusion>
                     <exclusion>
                         <groupId>org.apache.cxf</groupId>
-                        <artifactId>cxf-rt-core</artifactId>
+                        <artifactId>cxf-core</artifactId>
                     </exclusion>
                     <exclusion>
                         <groupId>org.springframework</groupId>
@@ -3489,8 +3522,8 @@
             </dependency>
 
             <dependency>
-                <groupId>org.apache.ws.security</groupId>
-                <artifactId>wss4j</artifactId>
+                <groupId>org.apache.wss4j</groupId>
+                <artifactId>wss4j-bindings</artifactId>
                 <version>${version.org.apache.ws.security}</version>
                 <exclusions>
                     <exclusion>
@@ -3503,6 +3536,74 @@
                     </exclusion>
                 </exclusions>
             </dependency>
+            <dependency>
+                <groupId>org.apache.wss4j</groupId>
+                <artifactId>wss4j-ws-security-common</artifactId>
+                <version>${version.org.apache.ws.security}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.geronimo.specs</groupId>
+                        <artifactId>geronimo-javamail_1.4_spec</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.opensaml</groupId>
+                        <artifactId>opensaml</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.wss4j</groupId>
+                <artifactId>wss4j-ws-security-dom</artifactId>
+                <version>${version.org.apache.ws.security}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>net.sf.ehcache</groupId>
+                        <artifactId>ehcache</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.wss4j</groupId>
+                <artifactId>wss4j-ws-security-stax</artifactId>
+                <version>${version.org.apache.ws.security}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>net.sf.ehcache</groupId>
+                        <artifactId>ehcache</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.wss4j</groupId>
+                <artifactId>wss4j-policy</artifactId>
+                <version>${version.org.apache.ws.security}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.opensaml</groupId>
+                        <artifactId>opensaml</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.wss4j</groupId>
+                <artifactId>wss4j-ws-security-policy-stax</artifactId>
+                <version>${version.org.apache.ws.security}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.opensaml</groupId>
+                        <artifactId>opensaml</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
             <dependency>
                 <groupId>org.bouncycastle</groupId>
                 <artifactId>bcprov-jdk15on</artifactId>
@@ -5919,6 +6020,10 @@
                         <artifactId>FastInfoset</artifactId>
                     </exclusion>
                     <exclusion>
+                        <groupId>com.sun.xml.bind</groupId>
+                        <artifactId>jaxb-core</artifactId>
+                    </exclusion>
+                    <exclusion>
                         <groupId>javax.xml.stream</groupId>
                         <artifactId>stax-api</artifactId>
                     </exclusion>
@@ -5953,6 +6058,10 @@
                     <exclusion>
                         <groupId>org.apache.cxf</groupId>
                         <artifactId>cxf-rt-transports-http</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.cxf</groupId>
+                        <artifactId>cxf-rt-transports-http-hc</artifactId>
                     </exclusion>
                     <exclusion>
                         <groupId>org.apache.cxf</groupId>
@@ -6029,6 +6138,10 @@
                     <exclusion>
                         <groupId>org.jboss.logging</groupId>
                         <artifactId>jboss-logging-spi</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.jboss.spec.javax.servlet</groupId>
+                        <artifactId>jboss-servlet-api_3.0_spec</artifactId>
                     </exclusion>
                     <exclusion>
                         <groupId>org.jboss.logging</groupId>
@@ -6121,6 +6234,10 @@
                     <exclusion>
                         <groupId>com.sun.xml.fastinfoset</groupId>
                         <artifactId>FastInfoset</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.sun.xml.bind</groupId>
+                        <artifactId>jaxb-core</artifactId>
                     </exclusion>
                     <exclusion>
                         <groupId>com.sun.xml.bind</groupId>
