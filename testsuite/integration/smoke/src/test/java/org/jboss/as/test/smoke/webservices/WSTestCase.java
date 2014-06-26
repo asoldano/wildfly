@@ -128,8 +128,8 @@ public class WSTestCase {
             final ModelNode endpoint = endpointResult.get("result");
             // Get the wsdl again to be sure the endpoint has been hit at least once
             final URL url = new URL(endpoint.get("wsdl-url").asString());
-            HttpRequest.get(url.toExternalForm(), 30, TimeUnit.SECONDS);
-
+            String content = HttpRequest.get(url.toExternalForm(), 30, TimeUnit.SECONDS);
+            Assert.assertTrue(content.contains("wsdl:definitions"));
             // Read metrics
             checkCountMetric(endpointResult, managementClient.getControllerClient(), "request-count");
             checkCountMetric(endpointResult, managementClient.getControllerClient(), "response-count");
