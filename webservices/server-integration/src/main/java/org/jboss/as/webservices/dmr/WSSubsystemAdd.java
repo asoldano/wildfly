@@ -26,6 +26,7 @@ import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.SUB
 import static org.jboss.as.webservices.dmr.Constants.WSDL_HOST;
 import static org.jboss.as.webservices.dmr.Constants.WSDL_PORT;
 import static org.jboss.as.webservices.dmr.Constants.WSDL_SECURE_PORT;
+import static org.jboss.as.webservices.dmr.Constants.WSDL_PATH_REWRITE_RULE;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -113,6 +114,9 @@ class WSSubsystemAdd extends AbstractBoottimeAddStepHandler {
         }
         if (configuration.hasDefined(WSDL_SECURE_PORT)) {
             config.setWebServiceSecurePort(Attributes.WSDL_SECURE_PORT.resolveModelAttribute(context, configuration).asInt());
+        }
+        if (configuration.hasDefined(WSDL_PATH_REWRITE_RULE)) {
+            config.setWebServicePathRewriteRule(Attributes.WSDL_PATH_REWRITE_RULE.resolveModelAttribute(context, configuration).asString());
         }
         return config;
     }

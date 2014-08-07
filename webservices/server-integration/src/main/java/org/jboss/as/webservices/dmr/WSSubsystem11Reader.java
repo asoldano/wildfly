@@ -112,6 +112,11 @@ class WSSubsystem11Reader implements XMLElementReader<List<ModelNode>> {
                     list.addAll(configs);
                     break;
                 }
+                case WSDL_PATH_REWRITE_RULE: {
+                    final String value = parseElementNoAttributes(reader);
+                    Attributes.WSDL_PATH_REWRITE_RULE.parseAndSetParameter(value, subsystem, reader);
+                    break;
+                }
                 default: {
                     handleUnknownElement(reader, address, element, list);
                 }
@@ -127,7 +132,7 @@ class WSSubsystem11Reader implements XMLElementReader<List<ModelNode>> {
     protected void readAttributes(final XMLExtendedStreamReader reader, final ModelNode operation) throws XMLStreamException {
         requireNoAttributes(reader);
     }
-    private String parseElementNoAttributes(final XMLExtendedStreamReader reader) throws XMLStreamException {
+    protected String parseElementNoAttributes(final XMLExtendedStreamReader reader) throws XMLStreamException {
         // no attributes
         requireNoAttributes(reader);
 
@@ -277,4 +282,5 @@ class WSSubsystem11Reader implements XMLElementReader<List<ModelNode>> {
 
         operations.add(operation);
     }
+
 }
