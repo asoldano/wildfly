@@ -117,7 +117,9 @@ abstract class AbstractInvocationHandler extends org.jboss.ws.common.invocation.
                      return wsInvocation.getInvocationContext().getTargetBean();
                  }
              };
-             ((WSComponent)component).setReference(reference);
+             if (component instanceof WSComponent) {
+                 ((WSComponent) component).setReference(reference);
+             }
          }
          final Method method = getComponentViewMethod(wsInvocation.getJavaMethod(), componentView.getViewMethods());
          final InterceptorContext context = new InterceptorContext();
