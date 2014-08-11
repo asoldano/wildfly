@@ -32,6 +32,7 @@ interface Constants {
     String WSDL_HOST = "wsdl-host";
     String WSDL_PORT = "wsdl-port";
     String WSDL_SECURE_PORT = "wsdl-secure-port";
+    String WSDL_URI_SCHEME = "wsdl-uri-scheme";
     String ENDPOINT = "endpoint";
     String ENDPOINT_NAME = "name";
     String ENDPOINT_CONTEXT = "context";

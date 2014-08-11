@@ -29,6 +29,7 @@ import static org.jboss.as.webservices.dmr.Constants.HANDLER;
 import static org.jboss.as.webservices.dmr.Constants.POST_HANDLER_CHAIN;
 import static org.jboss.as.webservices.dmr.Constants.PRE_HANDLER_CHAIN;
 import static org.jboss.as.webservices.dmr.Constants.PROPERTY;
+import static org.jboss.as.webservices.dmr.Constants.WSDL_URI_SCHEME;
 
 import org.jboss.as.controller.AttributeDefinition;
 import org.jboss.as.controller.Extension;
@@ -63,6 +64,7 @@ public final class WSExtension implements Extension {
 
     static final PathElement ENDPOINT_PATH = PathElement.pathElement(ENDPOINT);
     static final PathElement CLIENT_CONFIG_PATH = PathElement.pathElement(CLIENT_CONFIG);
+    static final PathElement WSDL_URI_SCHEME_PATH = PathElement.pathElement(WSDL_URI_SCHEME);
     static final PathElement ENDPOINT_CONFIG_PATH = PathElement.pathElement(ENDPOINT_CONFIG);
     private static final PathElement PROPERTY_PATH = PathElement.pathElement(PROPERTY);
     static final PathElement PRE_HANDLER_CHAIN_PATH = PathElement.pathElement(PRE_HANDLER_CHAIN);
@@ -157,6 +159,7 @@ public final class WSExtension implements Extension {
                 .addReadWriteAttribute(Attributes.WSDL_HOST, null, new WSServerConfigAttributeHandler(Attributes.WSDL_HOST))
                 .addReadWriteAttribute(Attributes.WSDL_PORT, null, new WSServerConfigAttributeHandler(Attributes.WSDL_PORT))
                 .addReadWriteAttribute(Attributes.WSDL_SECURE_PORT, null, new WSServerConfigAttributeHandler(Attributes.WSDL_SECURE_PORT))
+                .addReadWriteAttribute(Attributes.WSDL_URI_SCHEME, null, new WSServerConfigAttributeHandler(Attributes.WSDL_URI_SCHEME))
                 .addReadWriteAttribute(Attributes.MODIFY_WSDL_ADDRESS, null, new WSServerConfigAttributeHandler(Attributes.MODIFY_WSDL_ADDRESS))
                 .addReadWriteAttribute(Attributes.STATISTICS_ENABLED, null, new WSServerConfigAttributeHandler(Attributes.STATISTICS_ENABLED))
                 .build();
@@ -197,6 +200,7 @@ public final class WSExtension implements Extension {
         ResourceTransformationDescriptionBuilder builder = TransformationDescriptionBuilder.Factory.createSubsystemInstance();
         builder.getAttributeBuilder().setDiscard(DiscardAttributeChecker.ALWAYS, Attributes.STATISTICS_ENABLED);
         builder.getAttributeBuilder().addRejectCheck(RejectAttributeChecker.SIMPLE_EXPRESSIONS, Attributes.SUBSYSTEM_ATTRIBUTES).end();
+        builder.getAttributeBuilder().setDiscard(DiscardAttributeChecker.ALWAYS, Attributes.WSDL_URI_SCHEME);
         builder.rejectChildResource(CLIENT_CONFIG_PATH);
 
         ResourceTransformationDescriptionBuilder endpoint = builder.addChildResource(ENDPOINT_CONFIG_PATH);
@@ -210,6 +214,7 @@ public final class WSExtension implements Extension {
         ModelVersion version = ModelVersion.create(1, 2, 0);
         ResourceTransformationDescriptionBuilder builder = TransformationDescriptionBuilder.Factory.createSubsystemInstance();
         builder.getAttributeBuilder().setDiscard(DiscardAttributeChecker.ALWAYS, Attributes.STATISTICS_ENABLED);
+        builder.getAttributeBuilder().setDiscard(DiscardAttributeChecker.ALWAYS, Attributes.WSDL_URI_SCHEME);
         TransformationDescription.Tools.register(builder.build(), registration, version);
     }
 }

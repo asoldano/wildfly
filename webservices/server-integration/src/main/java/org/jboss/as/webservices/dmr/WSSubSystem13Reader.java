@@ -23,9 +23,14 @@ package org.jboss.as.webservices.dmr;
 
 import static org.jboss.as.controller.parsing.ParseUtils.requireNoNamespaceAttribute;
 import static org.jboss.as.controller.parsing.ParseUtils.unexpectedAttribute;
+import static org.jboss.as.controller.parsing.ParseUtils.unexpectedElement;
+
+import java.util.EnumSet;
+import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.jboss.as.controller.PathAddress;
 import org.jboss.dmr.ModelNode;
 import org.jboss.staxmapper.XMLExtendedStreamReader;
 
@@ -34,7 +39,7 @@ import org.jboss.staxmapper.XMLExtendedStreamReader;
  */
 class WSSubSystem13Reader extends WSSubSystem12Reader {
     private static final WSSubSystem13Reader INSTANCE = new WSSubSystem13Reader();
-
+    private final EnumSet<Element> encountered = EnumSet.noneOf(Element.class);
     protected WSSubSystem13Reader() {
     }
 
@@ -61,4 +66,22 @@ class WSSubSystem13Reader extends WSSubSystem12Reader {
         }
     }
 
+    @Override
+    protected void handleUnknownElement(final XMLExtendedStreamReader reader, final PathAddress parentAddress, final Element element, List<ModelNode> list) throws XMLStreamException {
+        //get the root ws subsystem add operation
+        ModelNode operation = list.get(0);
+        switch (element) {
+            case WSDL_URI_SCHEME: {
+                if (!encountered.add(element)) {
+                    throw unexpectedElement(reader);
+                }
+                final String value = parseElementNoAttributes(reader);
+                Attributes.WSDL_URI_SCHEME.parseAndSetParameter(value, operation, reader);
+                break;
+            }
+            default: {
+                super.handleUnknownElement(reader, parentAddress, element, list);
+            }
+        }
+    }
 }

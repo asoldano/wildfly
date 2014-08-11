@@ -127,7 +127,7 @@ class WSSubsystem11Reader implements XMLElementReader<List<ModelNode>> {
     protected void readAttributes(final XMLExtendedStreamReader reader, final ModelNode operation) throws XMLStreamException {
         requireNoAttributes(reader);
     }
-    private String parseElementNoAttributes(final XMLExtendedStreamReader reader) throws XMLStreamException {
+    protected String parseElementNoAttributes(final XMLExtendedStreamReader reader) throws XMLStreamException {
         // no attributes
         requireNoAttributes(reader);
 

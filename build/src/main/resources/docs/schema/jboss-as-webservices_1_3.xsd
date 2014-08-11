@@ -105,6 +105,13 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
+      <xs:element name="wsdl-uri-scheme" type="uriSchemeType" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Set this property to force define the http or https protocl to publish wsdl and service. 
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
       <xs:element name="endpoint-config" type="endpointConfigType" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="client-config" type="clientConfigType" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
@@ -114,7 +121,19 @@
       </xs:annotation>
     </xs:attribute>
   </xs:complexType>
+  <xs:simpleType name="uriSchemeType">
+    <xs:annotation>
+      <xs:documentation>
 
+        The enumeration type to define the wsdl uri scheme, it can be http or https
+
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="http"/>
+      <xs:enumeration value="https"/>
+    </xs:restriction>
+  </xs:simpleType> 
   <xs:complexType name="endpointConfigType">
     <xs:annotation>
       <xs:documentation>

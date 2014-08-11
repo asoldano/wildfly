@@ -26,6 +26,7 @@ package org.jboss.as.webservices.dmr;
 
 import org.jboss.as.controller.SimpleAttributeDefinition;
 import org.jboss.as.controller.SimpleAttributeDefinitionBuilder;
+import org.jboss.as.controller.operations.validation.EnumValidator;
 import org.jboss.as.controller.operations.validation.IntRangeValidator;
 import org.jboss.dmr.ModelNode;
 import org.jboss.dmr.ModelType;
@@ -56,6 +57,13 @@ interface Attributes {
             .setValidator(new IntRangeValidator(1, true, true))
             .setAllowExpression(true)
             .build();
+    SimpleAttributeDefinition WSDL_URI_SCHEME = new SimpleAttributeDefinitionBuilder(Constants.WSDL_URI_SCHEME, ModelType.STRING)
+            .setAllowNull(true)
+            .setMinSize(1)
+            .setValidator(new EnumValidator<>(WsdlUriSchema.class, false, false))
+            .setAllowExpression(false)
+            .build();
+    enum WsdlUriSchema {http, https}
 
     SimpleAttributeDefinition MODIFY_WSDL_ADDRESS = new SimpleAttributeDefinitionBuilder(Constants.MODIFY_WSDL_ADDRESS, ModelType.BOOLEAN)
             .setAllowNull(true)
@@ -67,7 +75,7 @@ interface Attributes {
             .setDefaultValue(new ModelNode(false))
             .setAllowExpression(true)
             .build();
-    SimpleAttributeDefinition[] SUBSYSTEM_ATTRIBUTES = {MODIFY_WSDL_ADDRESS, WSDL_HOST, WSDL_PORT, WSDL_SECURE_PORT};
+    SimpleAttributeDefinition[] SUBSYSTEM_ATTRIBUTES = {MODIFY_WSDL_ADDRESS, WSDL_HOST, WSDL_PORT, WSDL_SECURE_PORT, WSDL_URI_SCHEME};
     SimpleAttributeDefinition VALUE = new SimpleAttributeDefinitionBuilder(Constants.VALUE, ModelType.STRING)
             .setAllowNull(true)
             .setAllowExpression(true)
