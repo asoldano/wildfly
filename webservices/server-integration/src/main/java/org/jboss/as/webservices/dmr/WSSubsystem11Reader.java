@@ -113,14 +113,14 @@ class WSSubsystem11Reader implements XMLElementReader<List<ModelNode>> {
                     break;
                 }
                 default: {
-                    handleUnknownElement(reader, address, element, list);
+                    handleUnknownElement(reader, address, element, list, encountered);
                 }
             }
         }
         //TODO：check required element
     }
 
-    protected void handleUnknownElement(final XMLExtendedStreamReader reader, final PathAddress parentAddress, Element element, List<ModelNode> list) throws XMLStreamException {
+    protected void handleUnknownElement(final XMLExtendedStreamReader reader, final PathAddress parentAddress, Element element, List<ModelNode> list, EnumSet<Element> encountered) throws XMLStreamException {
         throw unexpectedElement(reader);
     }
 

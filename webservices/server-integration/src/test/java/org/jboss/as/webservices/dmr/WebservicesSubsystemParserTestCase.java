@@ -217,7 +217,7 @@ public class WebservicesSubsystemParserTestCase extends AbstractSubsystemBaseTes
     public void testTransformersEAP610() throws Exception {
         testTransformers_1_2_0(ModelTestControllerVersion.EAP_6_1_0);
     }
-
+    
     @Test
     public void testTransformersEAP611() throws Exception {
         testTransformers_1_2_0(ModelTestControllerVersion.EAP_6_1_1);

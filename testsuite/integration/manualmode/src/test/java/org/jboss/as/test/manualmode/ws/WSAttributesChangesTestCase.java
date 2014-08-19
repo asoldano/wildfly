@@ -22,16 +22,23 @@
 package org.jboss.as.test.manualmode.ws;
 
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.ADDRESS;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.DEPLOYMENT;
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.FAILURE_DESCRIPTION;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.INCLUDE_RUNTIME;
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.NAME;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP;
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OPERATION_REQUIRES_RELOAD;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP_ADDR;
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OUTCOME;
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.READ_ATTRIBUTE_OPERATION;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.READ_RESOURCE_OPERATION;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.RECURSIVE;
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.RESPONSE_HEADERS;
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.RESULT;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.SUBSYSTEM;
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.SUCCESS;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.VALUE;
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.UNDEFINE_ATTRIBUTE_OPERATION;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.VALUE;
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.WRITE_ATTRIBUTE_OPERATION;
 import static org.junit.Assert.fail;
 
@@ -65,6 +72,7 @@ import org.junit.runner.RunWith;
  * when there's no WS deployment on the server.
  *
  * @author <a href="mailto:alessio.soldano@jboss.com">Alessio Soldano</a>
+ * @author <a href="mailto:ema@redhat.com">Jim Ma</a>
  */
 @RunWith(Arquillian.class)
 @RunAsClient
@@ -223,6 +231,77 @@ public class WSAttributesChangesTestCase {
         }
     }
     
+    @Test
+    public void testWsdlUriSchemeChanges() throws Exception {
+        performWsdlUriSchemeAttributeTest(false);
+        performWsdlUriSchemeAttributeTest(true);
+    }
+    
+    private void performWsdlUriSchemeAttributeTest(boolean checkUpdateWithDeployedEndpoint) throws Exception {
+        Assert.assertTrue(containerController.isStarted(DEFAULT_JBOSSAS));
+        ManagementClient managementClient = new ManagementClient(TestSuiteEnvironment.getModelControllerClient(),
+                TestSuiteEnvironment.getServerAddress(), TestSuiteEnvironment.getServerPort(), "http-remoting");
+        
+        ModelControllerClient client = managementClient.getControllerClient();
+        String initialWsdlUriScheme = null;
+        try {
+            //save initial wsdl-uri-schema value to restore later
+            initialWsdlUriScheme = getAttribute("wsdl-uri-scheme", client, false);
+            //set wsdl-uri-scheme value to https
+            ModelNode op = createOpNode("subsystem=webservices/", WRITE_ATTRIBUTE_OPERATION);
+            op.get(NAME).set("wsdl-uri-scheme");
+            op.get(VALUE).set("https");
+            applyUpdate(client, op, false);
+            deployer.deploy(DEP_1);
+            //check if it works for the deployed endpoint url
+            checkWSDLUriScheme(client, DEP_1 + ".war", "https");
+            deployer.undeploy(DEP_1);
+            
+            //set wsdl-uri-scheme value to http
+            ModelNode op2 = createOpNode("subsystem=webservices/", WRITE_ATTRIBUTE_OPERATION);
+            op2.get(NAME).set("wsdl-uri-scheme");
+            op2.get(VALUE).set("http");
+            applyUpdate(client, op2, false);
+            deployer.deploy(DEP_1);
+            //check if the uri scheme of soap address is modified to http
+            checkWSDLUriScheme(client, DEP_1 + ".war", "http");
+            if (checkUpdateWithDeployedEndpoint) {
+                //set wsdl-uri-schema value to http
+                ModelNode opB = createOpNode("subsystem=webservices/", WRITE_ATTRIBUTE_OPERATION);
+                opB.get(NAME).set("wsdl-uri-scheme");
+                opB.get(VALUE).set("https");
+                applyUpdate(client, opB, true);
+                //check this doesn't apply to endpointed which are deployed before this change
+                checkWSDLUriScheme(client, DEP_1 + ".war", "http");
+                deployer.undeploy(DEP_1);
+                deployer.deploy(DEP_1);
+                //check this will take effect to redeployed endpoint
+                checkWSDLUriScheme(client, DEP_1 + ".war", "http");
+            }
+        } finally {
+            try {
+                deployer.undeploy(DEP_1);
+            } catch (Throwable t) {
+                //ignore
+            }
+            try {
+                //restore the value of wsdl-uri-scheme attribute
+                ModelNode op = null;
+                if ("undefined".equals(initialWsdlUriScheme)) {
+                    op = createOpNode("subsystem=webservices/", UNDEFINE_ATTRIBUTE_OPERATION);
+                    op.get(NAME).set("wsdl-uri-scheme");
+                } else {
+                    op = createOpNode("subsystem=webservices/", WRITE_ATTRIBUTE_OPERATION);
+                    op.get(NAME).set("wsdl-uri-scheme");
+                    op.get(VALUE).set(initialWsdlUriScheme);
+                }
+                applyUpdate(client, op, checkUpdateWithDeployedEndpoint);
+            } finally {
+                managementClient.close();
+            }
+        }
+    }
+    
     @After
     public void stopContainer() {
         if (containerController.isStarted(DEFAULT_JBOSSAS)) {
@@ -231,11 +310,17 @@ public class WSAttributesChangesTestCase {
     }
 
     private String getAttribute(final String attribute, final ModelControllerClient client) throws Exception {
+        return getAttribute(attribute, client, true);
+    }
+
+    private String getAttribute(final String attribute, final ModelControllerClient client, final boolean checkDefined) throws Exception {
         ModelNode op = createOpNode("subsystem=webservices/", READ_ATTRIBUTE_OPERATION);
         op.get(NAME).set(attribute);
         final ModelNode result = client.execute(new OperationBuilder(op).build());
         if (result.hasDefined(OUTCOME) && SUCCESS.equals(result.get(OUTCOME).asString())) {
-            Assert.assertTrue(result.hasDefined(RESULT));
+            if (checkDefined) {
+                Assert.assertTrue(result.hasDefined(RESULT));
+            }
             return result.get(RESULT).asString();
         } else if (result.hasDefined(FAILURE_DESCRIPTION)) {
             throw new Exception(result.get(FAILURE_DESCRIPTION).toString());
@@ -296,6 +381,47 @@ public class WSAttributesChangesTestCase {
             fail("Could not check soap:address!");
         } finally {
             connection.disconnect();
+        }
+    }
+    
+    private void checkWSDLUriScheme(final ModelControllerClient managementClient, String deploymentName, String expectedScheme) throws Exception {
+    	final ModelNode address = new ModelNode();
+        address.add(DEPLOYMENT, deploymentName);
+        address.add(SUBSYSTEM, "webservices"); 
+        address.add("endpoint", "*"); // get all endpoints
+       
+        final ModelNode operation = new ModelNode();
+        operation.get(OP).set(READ_RESOURCE_OPERATION);
+        operation.get(OP_ADDR).set(address);
+        operation.get(INCLUDE_RUNTIME).set(true);
+        operation.get(RECURSIVE).set(true);
+                
+        ModelNode result = managementClient.execute(operation);
+        Assert.assertEquals(SUCCESS, result.get(OUTCOME).asString());
+        for (final ModelNode endpointResult : result.get("result").asList()) {
+            final ModelNode endpoint = endpointResult.get("result");
+            final URL wsdlURL = new URL (endpoint.get("wsdl-url").asString());
+            HttpURLConnection connection = (HttpURLConnection) wsdlURL.openConnection();
+            try {
+                connection.connect();
+                Assert.assertEquals(200, connection.getResponseCode());
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String line;
+                while ((line = in.readLine()) != null) {
+                    if (line.contains("address location")) {
+                        if ("https".equals(expectedScheme)) {
+                            Assert.assertTrue(line, line.contains("https"));
+                            return;
+                        } else {
+                            Assert.assertTrue(line, line.contains("http") && !line.contains("https"));
+                            return;
+                        }
+                    }
+                }
+                fail(line + " Could not check soap:address!");
+            } finally {
+                connection.disconnect();
+            }
         }
     }
 }

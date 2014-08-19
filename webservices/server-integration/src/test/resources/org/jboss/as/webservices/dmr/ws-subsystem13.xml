@@ -4,6 +4,7 @@
     <wsdl-port>${ws.wsdl-port:9090}</wsdl-port>
     <wsdl-secure-port>${ws.wsdl-secure-port:9443}</wsdl-secure-port>
     <wsdl-path-rewrite-rule>s/jaxws-jbws2150-codefirst/xx\/jaxws-jbws2150-codefirst/g</wsdl-path-rewrite-rule>
+    <wsdl-uri-scheme>https</wsdl-uri-scheme>
     <endpoint-config name="Standard-Endpoint-Config"/>
     <endpoint-config name="Recording-Endpoint-Config">
         <pre-handler-chain name="recording-handlers" protocol-bindings="${ws.protocol-bindings:##SOAP11_HTTP ##SOAP11_HTTP_MTOM ##SOAP12_HTTP ##SOAP12_HTTP_MTOM}">
