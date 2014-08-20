@@ -39,7 +39,6 @@ import org.jboss.staxmapper.XMLExtendedStreamReader;
  */
 class WSSubSystem13Reader extends WSSubSystem12Reader {
     private static final WSSubSystem13Reader INSTANCE = new WSSubSystem13Reader();
-    private final EnumSet<Element> encountered = EnumSet.noneOf(Element.class);
     protected WSSubSystem13Reader() {
     }
 
@@ -67,7 +66,7 @@ class WSSubSystem13Reader extends WSSubSystem12Reader {
     }
 
     @Override
-    protected void handleUnknownElement(final XMLExtendedStreamReader reader, final PathAddress parentAddress, final Element element, List<ModelNode> list) throws XMLStreamException {
+    protected void handleUnknownElement(final XMLExtendedStreamReader reader, final PathAddress parentAddress, final Element element, List<ModelNode> list, EnumSet<Element> encountered) throws XMLStreamException {
         //get the root ws subsystem add operation
         ModelNode operation = list.get(0);
         switch (element) {
@@ -85,7 +84,7 @@ class WSSubSystem13Reader extends WSSubSystem12Reader {
                 break;
             }
             default: {
-                super.handleUnknownElement(reader, parentAddress, element, list);
+                super.handleUnknownElement(reader, parentAddress, element, list, encountered);
             }
         }
     }

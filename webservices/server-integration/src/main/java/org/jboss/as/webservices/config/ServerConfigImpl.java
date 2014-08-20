@@ -51,6 +51,7 @@ public final class ServerConfigImpl extends AbstractServerConfig implements Abst
     private final DMRSynchCheckHandler webServiceHostUCH = new DMRSynchCheckHandler();
     private final DMRSynchCheckHandler webServicePortUCH = new DMRSynchCheckHandler();
     private final DMRSynchCheckHandler webServiceSecurePortUCH = new DMRSynchCheckHandler();
+    private final DMRSynchCheckHandler webServiceUriSchemeUCH = new DMRSynchCheckHandler();
     private final DMRSynchCheckHandler modifySOAPAddressUCH = new DMRSynchCheckHandler();
     private final DMRSynchCheckHandler webServicePathRewriteRuleUCH = new DMRSynchCheckHandler();
 
@@ -114,6 +115,9 @@ public final class ServerConfigImpl extends AbstractServerConfig implements Abst
         setWebServiceSecurePort(port, forceUpdate ? null : webServiceSecurePortUCH);
     }
 
+    public void setWebServiceUriScheme(String scheme, boolean forceUpdate) {
+        setWebServiceUriScheme(scheme, forceUpdate ? null : webServiceUriSchemeUCH);
+    }
     @Override
     public void setWebServiceSecurePort(int port) {
         //prevent any change if the DMR configuration is not in synch anymore with the runtime

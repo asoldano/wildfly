@@ -21,6 +21,7 @@
  */
 package org.jboss.as.webservices.dmr;
 
+import java.util.EnumSet;
 import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
@@ -43,7 +44,7 @@ class WSSubSystem12Reader extends WSSubsystem11Reader {
     }
 
     @Override
-    protected void handleUnknownElement(final XMLExtendedStreamReader reader, final PathAddress parentAddress, final Element element, List<ModelNode> list) throws XMLStreamException {
+    protected void handleUnknownElement(final XMLExtendedStreamReader reader, final PathAddress parentAddress, final Element element, List<ModelNode> list, EnumSet<Element> encountered) throws XMLStreamException {
         switch (element) {
             case CLIENT_CONFIG: {
                 List<ModelNode> configs = readConfig(reader, parentAddress, true);
@@ -51,7 +52,7 @@ class WSSubSystem12Reader extends WSSubsystem11Reader {
                 break;
             }
             default: {
-                super.handleUnknownElement(reader, parentAddress, element, list);
+                super.handleUnknownElement(reader, parentAddress, element, list, encountered);
             }
         }
     }

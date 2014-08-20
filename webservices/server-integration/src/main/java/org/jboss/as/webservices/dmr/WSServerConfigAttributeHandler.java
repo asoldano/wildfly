@@ -27,9 +27,8 @@ import static org.jboss.as.webservices.dmr.Constants.WSDL_HOST;
 import static org.jboss.as.webservices.dmr.Constants.WSDL_PORT;
 import static org.jboss.as.webservices.dmr.Constants.WSDL_SECURE_PORT;
 import static org.jboss.as.webservices.dmr.Constants.WSDL_PATH_REWRITE_RULE;
-
+import static org.jboss.as.webservices.dmr.Constants.WSDL_URI_SCHEME;
 import java.net.UnknownHostException;
-
 import org.jboss.as.controller.AbstractWriteAttributeHandler;
 import org.jboss.as.controller.AttributeDefinition;
 import org.jboss.as.controller.OperationContext;
@@ -113,6 +112,12 @@ final class WSServerConfigAttributeHandler extends AbstractWriteAttributeHandler
             } else if (WSDL_PATH_REWRITE_RULE.equals(attributeName)) {
                 final String path = value != null ? value : null;
                 config.setWebServicePathRewriteRule(path, isRevert);
+            } else if (WSDL_URI_SCHEME.equals(attributeName)) {
+                if (value == null || value.equals("http") || value.equals("https")) {
+                    config.setWebServiceUriScheme(value, isRevert);
+                } else {
+                    throw new IllegalArgumentException(attributeName + " = " + value);
+                }
             } else if (STATISTICS_ENABLED.equals(attributeName)) {
                 final boolean enabled = value != null ? Boolean.parseBoolean(value) : false;
                 config.setStatisticsEnabled(enabled);
