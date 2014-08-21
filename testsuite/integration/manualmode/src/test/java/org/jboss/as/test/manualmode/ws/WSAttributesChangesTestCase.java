@@ -230,13 +230,13 @@ public class WSAttributesChangesTestCase {
             }
         }
     }
-    
+
     @Test
     public void testWsdlUriSchemeChanges() throws Exception {
         performWsdlUriSchemeAttributeTest(false);
         performWsdlUriSchemeAttributeTest(true);
     }
-    
+
     private void performWsdlUriSchemeAttributeTest(boolean checkUpdateWithDeployedEndpoint) throws Exception {
         Assert.assertTrue(containerController.isStarted(DEFAULT_JBOSSAS));
         ManagementClient managementClient = new ManagementClient(TestSuiteEnvironment.getModelControllerClient(),
@@ -301,7 +301,72 @@ public class WSAttributesChangesTestCase {
             }
         }
     }
-    
+
+    @Test
+    public void testWsdlPathRewriteRuleChanges() throws Exception {
+        performWsdlPathRewriteRuleAttributeTest(false);
+        performWsdlPathRewriteRuleAttributeTest(true);
+    }
+
+
+    private void performWsdlPathRewriteRuleAttributeTest(boolean checkUpdateWithDeployedEndpoint) throws Exception {
+        Assert.assertTrue(containerController.isStarted(DEFAULT_JBOSSAS));
+        ManagementClient managementClient = new ManagementClient(TestSuiteEnvironment.getModelControllerClient(),
+            TestSuiteEnvironment.getServerAddress(), TestSuiteEnvironment.getServerPort(), "http-remoting");
+
+        ModelControllerClient client = managementClient.getControllerClient();
+
+        try {
+
+            final String expectedContext = "xx/jaxws-manual-pojo-1";
+            final String sedCmdA = "s/jaxws-manual-pojo-1/xx\\/jaxws-manual-pojo-1/g";
+
+            ModelNode op = createOpNode("subsystem=webservices/", WRITE_ATTRIBUTE_OPERATION);
+            op.get(NAME).set("wsdl-path-rewrite-rule");
+            op.get(VALUE).set(sedCmdA);
+            applyUpdate(client, op, false); //update successful, no need to reload
+
+            //now we deploy an endpoint...
+            deployer.deploy(DEP_1);
+
+            //verify the updated wsdl host is used...
+            URL wsdlURL = new URL(managementClient.getWebUri().toURL(), '/' + DEP_1 + "/POJOService?wsdl");
+            checkWsdl(wsdlURL, expectedContext);
+
+            if (checkUpdateWithDeployedEndpoint) {
+                //final String hostnameB = "foo-host-b";
+                final String sedCmdB = "s/jaxws-manual-pojo-1/FOO\\/jaxws-manual-pojo-1/g";
+
+                ModelNode opB = createOpNode("subsystem=webservices/", WRITE_ATTRIBUTE_OPERATION);
+                opB.get(NAME).set("wsdl-path-rewrite-rule");
+                opB.get(VALUE).set(sedCmdB);
+                applyUpdate(client, opB, true); //update again, but we'll need to reload, as there's an active deployment
+
+                //check the wsdl host is still the one we updated to before
+                checkWsdl(wsdlURL, expectedContext);
+
+                //and check that still applies even if we undeploy and redeploy the endpoint
+                deployer.undeploy(DEP_1);
+                deployer.deploy(DEP_1);
+                checkWsdl(wsdlURL, expectedContext);
+            }
+        } finally {
+            try {
+                deployer.undeploy(DEP_1);
+            } catch (Throwable t) {
+                //ignore
+            }
+            try {
+                ModelNode op = createOpNode("subsystem=webservices/", UNDEFINE_ATTRIBUTE_OPERATION);
+                op.get(NAME).set("wsdl-path-rewrite-rule");
+                applyUpdate(client, op, checkUpdateWithDeployedEndpoint);
+            } finally {
+                managementClient.close();
+            }
+        }
+    }
+
+
     @After
     public void stopContainer() {
         if (containerController.isStarted(DEFAULT_JBOSSAS)) {
