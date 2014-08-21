@@ -37,12 +37,12 @@ import org.jboss.staxmapper.XMLExtendedStreamReader;
 /**
  * @author <a href="mailto:ema@redhat.com">Jim Ma</a>
  */
-class WSSubSystem13Reader extends WSSubSystem12Reader {
-    private static final WSSubSystem13Reader INSTANCE = new WSSubSystem13Reader();
-    protected WSSubSystem13Reader() {
+class WSSubSystem20Reader extends WSSubSystem12Reader {
+    private static final WSSubSystem20Reader INSTANCE = new WSSubSystem20Reader();
+    protected WSSubSystem20Reader() {
     }
 
-    static WSSubSystem13Reader getInstance() {
+    static WSSubSystem20Reader getInstance() {
         return INSTANCE;
     }
 

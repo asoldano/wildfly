@@ -192,7 +192,7 @@ public final class WSExtension implements Extension {
         context.setSubsystemXmlMapping(SUBSYSTEM_NAME, Namespace.WEBSERVICES_1_0.getUriString(), WSSubsystemLegacyReader.getInstance());
         context.setSubsystemXmlMapping(SUBSYSTEM_NAME, Namespace.WEBSERVICES_1_1.getUriString(), WSSubsystem11Reader.getInstance());
         context.setSubsystemXmlMapping(SUBSYSTEM_NAME, Namespace.WEBSERVICES_1_2.getUriString(), WSSubSystem12Reader.getInstance());
-        context.setSubsystemXmlMapping(SUBSYSTEM_NAME, Namespace.WEBSERVICES_1_3.getUriString(), WSSubSystem13Reader.getInstance());
+        context.setSubsystemXmlMapping(SUBSYSTEM_NAME, Namespace.WEBSERVICES_2_0.getUriString(), WSSubSystem20Reader.getInstance());
     }
 
     private void registerTransformers1_1_0(SubsystemRegistration registration) {

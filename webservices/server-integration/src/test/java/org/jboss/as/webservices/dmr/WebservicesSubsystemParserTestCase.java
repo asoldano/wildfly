@@ -62,7 +62,7 @@ public class WebservicesSubsystemParserTestCase extends AbstractSubsystemBaseTes
 
     @Override
     protected String getSubsystemXml() throws IOException {
-        return readResource("ws-subsystem13.xml"); //for default test
+        return readResource("ws-subsystem20.xml"); //for default test
     }
 
     protected AdditionalInitialization createAdditionalInitialization() {
