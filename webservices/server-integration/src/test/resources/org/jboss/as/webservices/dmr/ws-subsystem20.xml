@@ -1,4 +1,4 @@
-<subsystem xmlns="urn:jboss:domain:webservices:1.3">
+<subsystem xmlns="urn:jboss:domain:webservices:2.0">
     <modify-wsdl-address>${ws.modify-wsdl-address:true}</modify-wsdl-address>
     <wsdl-host>${jboss.bind.address:localhost}</wsdl-host>
     <wsdl-port>${ws.wsdl-port:9090}</wsdl-port>
