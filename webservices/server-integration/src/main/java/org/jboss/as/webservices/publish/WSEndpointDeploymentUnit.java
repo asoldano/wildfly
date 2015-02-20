@@ -25,16 +25,12 @@ import java.security.AccessController;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import org.jboss.as.controller.PathAddress;
-import org.jboss.as.controller.PathElement;
-import org.jboss.as.controller.registry.Resource;
 import org.jboss.as.server.CurrentServiceContainer;
-import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.as.server.deployment.SimpleAttachable;
+import org.jboss.as.webservices.deployers.WSDeploymentUnit;
 import org.jboss.as.webservices.metadata.model.JAXWSDeployment;
 import org.jboss.as.webservices.metadata.model.POJOEndpoint;
 import org.jboss.as.webservices.util.WSAttachmentKeys;
-import org.jboss.dmr.ModelNode;
 import org.jboss.metadata.web.jboss.JBossWebMetaData;
 import org.jboss.msc.service.ServiceContainer;
 import org.jboss.msc.service.ServiceName;
@@ -42,7 +38,7 @@ import org.jboss.msc.service.ServiceRegistry;
 import org.jboss.wsf.spi.metadata.webservices.JBossWebservicesMetaData;
 import org.jboss.wsf.spi.metadata.webservices.WebservicesMetaData;
 
-public class WSEndpointDeploymentUnit extends SimpleAttachable implements DeploymentUnit {
+public class WSEndpointDeploymentUnit extends SimpleAttachable implements WSDeploymentUnit {
 
     private String deploymentName;
 
@@ -111,7 +107,7 @@ public class WSEndpointDeploymentUnit extends SimpleAttachable implements Deploy
     }
 
     @Override
-    public DeploymentUnit getParent() {
+    public WSDeploymentUnit getParent() {
         return null;
     }
 
@@ -123,26 +119,6 @@ public class WSEndpointDeploymentUnit extends SimpleAttachable implements Deploy
     @Override
     public ServiceRegistry getServiceRegistry() {
         return currentServiceContainer();
-    }
-
-    @Override
-    public ModelNode getDeploymentSubsystemModel(String subsystemName) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public ModelNode createDeploymentSubModel(String subsystemName, PathElement address) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public ModelNode createDeploymentSubModel(String subsystemName, PathAddress address) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public ModelNode createDeploymentSubModel(String subsystemName, PathAddress address, Resource resource) {
-        throw new UnsupportedOperationException();
     }
 
     private static ServiceContainer currentServiceContainer() {

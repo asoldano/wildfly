@@ -33,7 +33,7 @@ import org.jboss.as.security.plugins.SecurityDomainContext;
 import org.jboss.as.security.service.SecurityDomainService;
 import org.jboss.as.server.CurrentServiceContainer;
 import org.jboss.as.server.deployment.Attachments;
-import org.jboss.as.server.deployment.DeploymentUnit;
+import org.jboss.as.webservices.deployers.WSDeploymentUnit;
 import org.jboss.as.webservices.logging.WSLogger;
 import org.jboss.as.webservices.metadata.model.EJBEndpoint;
 import org.jboss.as.webservices.security.EJBMethodSecurityAttributesAdaptor;
@@ -94,7 +94,7 @@ public final class EndpointService implements Service<Endpoint> {
         return endpoint;
     }
 
-    public static ServiceName getServiceName(final DeploymentUnit unit, final String endpointName) {
+    public static ServiceName getServiceName(final WSDeploymentUnit unit, final String endpointName) {
         if (unit.getParent() != null) {
             return WSServices.ENDPOINT_SERVICE.append(unit.getParent().getName()).append(unit.getName()).append(endpointName);
         } else {
@@ -206,7 +206,7 @@ public final class EndpointService implements Service<Endpoint> {
         return ejbMethodSecurityAttributeServiceValue;
     }
 
-    public static void install(final ServiceTarget serviceTarget, final Endpoint endpoint, final DeploymentUnit unit) {
+    public static void install(final ServiceTarget serviceTarget, final Endpoint endpoint, final WSDeploymentUnit unit) {
         final ServiceName serviceName = getServiceName(unit, endpoint.getShortName());
         final String propContext = endpoint.getName().getKeyProperty(Endpoint.SEPID_PROPERTY_CONTEXT);
         final String propEndpoint = endpoint.getName().getKeyProperty(Endpoint.SEPID_PROPERTY_ENDPOINT);
@@ -231,7 +231,7 @@ public final class EndpointService implements Service<Endpoint> {
         unit.addToAttachmentList(Attachments.WEB_DEPENDENCIES, serviceName);
     }
 
-    public static void uninstall(final Endpoint endpoint, final DeploymentUnit unit) {
+    public static void uninstall(final Endpoint endpoint, final WSDeploymentUnit unit) {
         final ServiceName serviceName = getServiceName(unit, endpoint.getShortName());
         final ServiceController<?> endpointService = currentServiceContainer().getService(serviceName);
         if (endpointService != null) {
@@ -246,7 +246,7 @@ public final class EndpointService implements Service<Endpoint> {
                 .unprefixSecurityDomain(metaDataSecurityDomain.trim());
     }
 
-    private static ServiceName getEJBViewMethodSecurityAttributesServiceName(final DeploymentUnit unit, final Endpoint endpoint) {
+    private static ServiceName getEJBViewMethodSecurityAttributesServiceName(final WSDeploymentUnit unit, final Endpoint endpoint) {
         for (EJBEndpoint ep : ASHelper.getJaxwsEjbs(unit)) {
             if (ep.getClassName().equals(endpoint.getTargetBeanName())) {
                 return ep.getEJBViewMethodSecurityAttributesService();
@@ -261,7 +261,7 @@ public final class EndpointService implements Service<Endpoint> {
      * @param unit
      * @return
      */
-    public static List<ServiceName> getServiceNamesFromDeploymentUnit(final DeploymentUnit unit) {
+    public static List<ServiceName> getServiceNamesFromDeploymentUnit(final WSDeploymentUnit unit) {
         final List<ServiceName> endpointServiceNames = new ArrayList<ServiceName>();
         Deployment deployment = unit.getAttachment(WSAttachmentKeys.DEPLOYMENT_KEY);
         for (Endpoint ep : deployment.getService().getEndpoints()) {

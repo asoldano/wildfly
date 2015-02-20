@@ -21,6 +21,7 @@
  */
 package org.jboss.as.webservices.deployers;
 
+import org.jboss.as.server.deployment.Attachable;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
@@ -108,7 +109,7 @@ public final class AspectDeploymentProcessor implements DeploymentUnitProcessor 
         }
     }
 
-    private static boolean isWebServiceDeployment(final DeploymentUnit unit) {
+    private static boolean isWebServiceDeployment(final Attachable unit) {
         return unit.getAttachment(WSAttachmentKeys.DEPLOYMENT_KEY) != null;
     }
 

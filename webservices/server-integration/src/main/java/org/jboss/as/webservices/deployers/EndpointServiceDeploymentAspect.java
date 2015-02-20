@@ -24,7 +24,6 @@ package org.jboss.as.webservices.deployers;
 import static org.jboss.ws.common.integration.WSHelper.getOptionalAttachment;
 import static org.jboss.ws.common.integration.WSHelper.getRequiredAttachment;
 
-import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.as.webservices.service.EndpointService;
 import org.jboss.msc.service.ServiceTarget;
 import org.jboss.ws.common.integration.AbstractDeploymentAspect;
@@ -45,7 +44,7 @@ public final class EndpointServiceDeploymentAspect extends AbstractDeploymentAsp
     @Override
     public void start(final Deployment dep) {
         final ServiceTarget target = getOptionalAttachment(dep, ServiceTarget.class);
-        final DeploymentUnit unit = getRequiredAttachment(dep, DeploymentUnit.class);
+        final WSDeploymentUnit unit = getRequiredAttachment(dep, WSDeploymentUnit.class);
         for (final Endpoint ep : dep.getService().getEndpoints()) {
             EndpointService.install(target, ep, unit);
         }
@@ -58,7 +57,7 @@ public final class EndpointServiceDeploymentAspect extends AbstractDeploymentAsp
                 ep.getLifecycleHandler().stop(ep);
             }
             if (stopServices) {
-                final DeploymentUnit unit = getRequiredAttachment(dep, DeploymentUnit.class);
+                final WSDeploymentUnit unit = getRequiredAttachment(dep, WSDeploymentUnit.class);
                 EndpointService.uninstall(ep, unit);
             }
         }

@@ -35,7 +35,6 @@ import org.jboss.as.ee.component.DeploymentDescriptorEnvironment;
 import org.jboss.as.ee.component.EEModuleClassDescription;
 import org.jboss.as.ee.component.EEModuleDescription;
 import org.jboss.as.ee.metadata.ClassAnnotationInformation;
-import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
 import org.jboss.as.webservices.injection.WSEndpointHandlersMapping;
 import org.jboss.as.webservices.metadata.model.EJBEndpoint;
@@ -54,7 +53,7 @@ public final class WSIntegrationProcessorJAXWS_HANDLER extends AbstractIntegrati
     }
 
     @Override
-    protected void processAnnotation(final DeploymentUnit unit, final EEModuleDescription moduleDescription) throws DeploymentUnitProcessingException {
+    protected void processAnnotation(final WSDeploymentUnit unit, final EEModuleDescription moduleDescription) throws DeploymentUnitProcessingException {
         final WSEndpointHandlersMapping mapping = getOptionalAttachment(unit, WS_ENDPOINT_HANDLERS_MAPPING_KEY);
         if (mapping == null)
             return;

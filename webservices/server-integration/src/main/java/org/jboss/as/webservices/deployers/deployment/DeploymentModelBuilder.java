@@ -21,7 +21,7 @@
  */
 package org.jboss.as.webservices.deployers.deployment;
 
-import org.jboss.as.server.deployment.DeploymentUnit;
+import org.jboss.as.webservices.deployers.WSDeploymentUnit;
 
 /**
  * Deployment builder interface.
@@ -34,5 +34,5 @@ interface DeploymentModelBuilder {
      *
      * @param unit deployment unit
      */
-    void newDeploymentModel(DeploymentUnit unit);
+    void newDeploymentModel(WSDeploymentUnit unit);
 }

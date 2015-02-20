@@ -21,6 +21,7 @@
  */
 package org.jboss.as.webservices.deployers;
 
+import org.jboss.as.server.deployment.Attachable;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
@@ -40,7 +41,7 @@ public final class WSModelDeploymentProcessor extends TCCLDeploymentProcessor im
 
     @Override
     public void internalDeploy(final DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException {
-        final DeploymentUnit unit = phaseContext.getDeploymentUnit();
+        final WSDeploymentUnit unit = new WSDeploymentUnitAdaptor(phaseContext.getDeploymentUnit());
         WSDeploymentBuilder.getInstance().build(unit);
 
         if (isWebServiceDeployment(unit)) { //note, this check works only after the WSDeploymentBuilder above has run
@@ -50,14 +51,14 @@ public final class WSModelDeploymentProcessor extends TCCLDeploymentProcessor im
     }
 
     @Override
-    public void internalUndeploy(final org.jboss.as.server.deployment.DeploymentUnit context) {
+    public void internalUndeploy(final DeploymentUnit context) {
         if (isWebServiceDeployment(context)) {
             ServerConfigImpl config = (ServerConfigImpl)context.getServiceRegistry().getRequiredService(WSServices.CONFIG_SERVICE).getValue();
             config.decrementWSDeploymentCount();
         }
     }
 
-    private static boolean isWebServiceDeployment(final DeploymentUnit unit) {
+    private static boolean isWebServiceDeployment(final Attachable unit) {
         return unit.getAttachment(WSAttachmentKeys.DEPLOYMENT_KEY) != null;
     }
 }

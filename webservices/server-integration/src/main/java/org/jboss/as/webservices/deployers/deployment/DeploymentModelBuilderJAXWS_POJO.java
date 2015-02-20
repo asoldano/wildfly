@@ -25,7 +25,7 @@ import static org.jboss.as.webservices.metadata.model.AbstractEndpoint.COMPONENT
 import static org.jboss.as.webservices.util.ASHelper.getJaxwsPojos;
 import static org.jboss.wsf.spi.deployment.EndpointType.JAXWS_JSE;
 
-import org.jboss.as.server.deployment.DeploymentUnit;
+import org.jboss.as.webservices.deployers.WSDeploymentUnit;
 import org.jboss.as.webservices.logging.WSLogger;
 import org.jboss.as.webservices.metadata.model.POJOEndpoint;
 import org.jboss.msc.service.ServiceName;
@@ -44,7 +44,7 @@ final class DeploymentModelBuilderJAXWS_POJO extends AbstractDeploymentModelBuil
     }
 
     @Override
-    protected void build(final Deployment dep, final DeploymentUnit unit) {
+    protected void build(final Deployment dep, final WSDeploymentUnit unit) {
         WSLogger.ROOT_LOGGER.trace("Creating JAXWS POJO endpoints meta data model");
         for (final POJOEndpoint pojoEndpoint : getJaxwsPojos(unit)) {
             final String pojoEndpointName = pojoEndpoint.getName();

@@ -66,7 +66,7 @@ public final class WSIntegrationProcessorJAXWS_JMS implements DeploymentUnitProc
 
     @Override
     public void deploy(final DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException {
-        final DeploymentUnit unit = phaseContext.getDeploymentUnit();
+        final WSDeploymentUnit unit = new WSDeploymentUnitAdaptor(phaseContext.getDeploymentUnit());
         if (DeploymentTypeMarker.isType(DeploymentType.EAR, unit)) {
             return;
         }
@@ -131,7 +131,7 @@ public final class WSIntegrationProcessorJAXWS_JMS implements DeploymentUnitProc
         // NOOP
     }
 
-    private static ResourceRoot getWsdlResourceRoot(final DeploymentUnit unit, final String wsdlPath) {
+    private static ResourceRoot getWsdlResourceRoot(final WSDeploymentUnit unit, final String wsdlPath) {
         final AttachmentList<ResourceRoot> resourceRoots = new AttachmentList<ResourceRoot>(ResourceRoot.class);
         final ResourceRoot root = unit.getAttachment(DEPLOYMENT_ROOT);
         resourceRoots.add(root);

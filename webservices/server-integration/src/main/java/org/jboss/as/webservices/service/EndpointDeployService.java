@@ -23,7 +23,7 @@ package org.jboss.as.webservices.service;
 
 import java.util.Map;
 
-import org.jboss.as.server.deployment.DeploymentUnit;
+import org.jboss.as.webservices.deployers.WSDeploymentUnit;
 import org.jboss.as.webservices.logging.WSLogger;
 import org.jboss.as.webservices.publish.EndpointPublisherHelper;
 import org.jboss.as.webservices.util.WSServices;
@@ -47,18 +47,18 @@ import org.jboss.wsf.spi.metadata.webservices.WebservicesMetaData;
  * @author alessio.soldano@jboss.com
  * @since 21-Nov-2013
  */
-public final class EndpointDeployService implements Service<DeploymentUnit> {
+public final class EndpointDeployService implements Service<WSDeploymentUnit> {
 
     private final ServiceName name;
-    private final DeploymentUnit unit;
+    private final WSDeploymentUnit unit;
 
-    private EndpointDeployService(final String context, final DeploymentUnit unit) {
+    private EndpointDeployService(final String context, final WSDeploymentUnit unit) {
         this.name = WSServices.ENDPOINT_DEPLOY_SERVICE.append(context);
         this.unit = unit;
     }
 
     @Override
-    public DeploymentUnit getValue() {
+    public WSDeploymentUnit getValue() {
         return unit;
     }
 
@@ -86,11 +86,11 @@ public final class EndpointDeployService implements Service<DeploymentUnit> {
         }
     }
 
-    public static DeploymentUnit install(final ServiceTarget serviceTarget, final String context, final ClassLoader loader,
+    public static WSDeploymentUnit install(final ServiceTarget serviceTarget, final String context, final ClassLoader loader,
             final String hostName, final Map<String,String> urlPatternToClassName, JBossWebMetaData jbwmd, WebservicesMetaData wsmd, JBossWebservicesMetaData jbwsmd) {
-        final DeploymentUnit unit = EndpointPublisherHelper.doPrepareStep(context, loader, urlPatternToClassName, jbwmd, wsmd, jbwsmd);
+        final WSDeploymentUnit unit = EndpointPublisherHelper.doPrepareStep(context, loader, urlPatternToClassName, jbwmd, wsmd, jbwsmd);
         final EndpointDeployService service = new EndpointDeployService(context, unit);
-        final ServiceBuilder<DeploymentUnit> builder = serviceTarget.addService(service.getName(), service);
+        final ServiceBuilder<WSDeploymentUnit> builder = serviceTarget.addService(service.getName(), service);
         builder.addDependency(DependencyType.REQUIRED, WSServices.CONFIG_SERVICE);
         builder.setInitialMode(Mode.ACTIVE);
         builder.install();

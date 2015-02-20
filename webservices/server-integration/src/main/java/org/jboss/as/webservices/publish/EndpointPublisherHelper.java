@@ -24,8 +24,8 @@ package org.jboss.as.webservices.publish;
 import java.util.List;
 import java.util.Map;
 
-import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.as.web.host.WebHost;
+import org.jboss.as.webservices.deployers.WSDeploymentUnit;
 import org.jboss.metadata.web.jboss.JBossWebMetaData;
 import org.jboss.msc.service.ServiceTarget;
 import org.jboss.wsf.spi.deployment.Endpoint;
@@ -41,7 +41,7 @@ import org.jboss.wsf.spi.publish.Context;
  */
 public class EndpointPublisherHelper {
 
-    public static Context doPublishStep(WebHost host, ServiceTarget target, DeploymentUnit unit) throws Exception {
+    public static Context doPublishStep(WebHost host, ServiceTarget target, WSDeploymentUnit unit) throws Exception {
         EndpointPublisherImpl publisher = new EndpointPublisherImpl(host, true);
         return publisher.doPublish(target, unit);
     }
@@ -55,17 +55,17 @@ public class EndpointPublisherHelper {
         publisher.stopWebApp(eps.get(0).getService().getDeployment());
     }
 
-    public static void doDeployStep(ServiceTarget target, DeploymentUnit unit) {
+    public static void doDeployStep(ServiceTarget target, WSDeploymentUnit unit) {
         EndpointPublisherImpl publisher = new EndpointPublisherImpl(true);
         publisher.doDeploy(target, unit);
     }
 
-    public static void undoDeployStep(DeploymentUnit unit) throws Exception {
+    public static void undoDeployStep(WSDeploymentUnit unit) throws Exception {
         EndpointPublisherImpl publisher = new EndpointPublisherImpl(true);
         publisher.undeploy(unit);
     }
 
-    public static DeploymentUnit doPrepareStep(String context, ClassLoader loader, Map<String, String> urlPatternToClassName,
+    public static WSDeploymentUnit doPrepareStep(String context, ClassLoader loader, Map<String, String> urlPatternToClassName,
             JBossWebMetaData jbwmd, WebservicesMetaData wsmd, JBossWebservicesMetaData jbwsmd) {
         EndpointPublisherImpl publisher = new EndpointPublisherImpl(null, true);
         return publisher.doPrepare(context, loader, urlPatternToClassName, jbwmd, wsmd, jbwsmd);

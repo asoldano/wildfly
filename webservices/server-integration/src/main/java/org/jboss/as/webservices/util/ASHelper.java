@@ -40,6 +40,7 @@ import org.jboss.as.controller.OperationContext;
 import org.jboss.as.ee.component.EEModuleClassDescription;
 import org.jboss.as.ee.metadata.ClassAnnotationInformation;
 import org.jboss.as.server.CurrentServiceContainer;
+import org.jboss.as.server.deployment.Attachable;
 import org.jboss.as.server.deployment.AttachmentKey;
 import org.jboss.as.server.deployment.AttachmentList;
 import org.jboss.as.server.deployment.Attachments;
@@ -48,6 +49,7 @@ import org.jboss.as.server.deployment.EjbDeploymentMarker;
 import org.jboss.as.server.deployment.annotation.CompositeIndex;
 import org.jboss.as.server.deployment.module.ResourceRoot;
 import org.jboss.as.web.common.WarMetaData;
+import org.jboss.as.webservices.deployers.WSDeploymentUnit;
 import org.jboss.as.webservices.deployers.WebServiceAnnotationInfo;
 import org.jboss.as.webservices.deployers.WebServiceProviderAnnotationInfo;
 import org.jboss.as.webservices.logging.WSLogger;
@@ -89,7 +91,7 @@ public final class ASHelper {
      * @param unit deployment unit
      * @return list of JAXWS EJBs meta data
      */
-    public static List<EJBEndpoint> getJaxwsEjbs(final DeploymentUnit unit) {
+    public static List<EJBEndpoint> getJaxwsEjbs(final Attachable unit) {
         final JAXWSDeployment jaxwsDeployment = getOptionalAttachment(unit, WSAttachmentKeys.JAXWS_ENDPOINTS_KEY);
         return jaxwsDeployment != null ? jaxwsDeployment.getEjbEndpoints() : Collections.<EJBEndpoint>emptyList();
     }
@@ -100,7 +102,7 @@ public final class ASHelper {
      * @param unit deployment unit
      * @return list of JAXWS POJOs meta data
      */
-    public static List<POJOEndpoint> getJaxwsPojos(final DeploymentUnit unit) {
+    public static List<POJOEndpoint> getJaxwsPojos(final Attachable unit) {
         final JAXWSDeployment jaxwsDeployment = unit.getAttachment(WSAttachmentKeys.JAXWS_ENDPOINTS_KEY);
         return jaxwsDeployment != null ? jaxwsDeployment.getPojoEndpoints() : Collections.<POJOEndpoint>emptyList();
     }
@@ -153,7 +155,7 @@ public final class ASHelper {
      * @return required attachment
      * @throws IllegalStateException if attachment value is null
      */
-    public static <A> A getRequiredAttachment(final DeploymentUnit unit, final AttachmentKey<A> key) {
+    public static <A> A getRequiredAttachment(final Attachable unit, final AttachmentKey<A> key) {
         final A value = unit.getAttachment(key);
         if (value == null) {
             throw new IllegalStateException();
@@ -170,7 +172,7 @@ public final class ASHelper {
      * @param key attachment key
      * @return optional attachment value or null
      */
-    public static <A> A getOptionalAttachment(final DeploymentUnit unit, final AttachmentKey<A> key) {
+    public static <A> A getOptionalAttachment(final Attachable unit, final AttachmentKey<A> key) {
         return unit.getAttachment(key);
     }
 
@@ -271,7 +273,7 @@ public final class ASHelper {
      * @param unit
      * @return the JBossWebMetaData or null if either that or the parent WarMetaData are not found.
      */
-    public static JBossWebMetaData getJBossWebMetaData(final DeploymentUnit unit) {
+    public static JBossWebMetaData getJBossWebMetaData(final Attachable unit) {
         final WarMetaData warMetaData = getOptionalAttachment(unit, WarMetaData.ATTACHMENT_KEY);
         JBossWebMetaData result = null;
         if (warMetaData != null) {
@@ -285,12 +287,12 @@ public final class ASHelper {
         return result;
     }
 
-    public static List<AnnotationInstance> getAnnotations(final DeploymentUnit unit, final DotName annotation) {
+    public static List<AnnotationInstance> getAnnotations(final Attachable unit, final DotName annotation) {
        final CompositeIndex compositeIndex = getRequiredAttachment(unit, Attachments.COMPOSITE_ANNOTATION_INDEX);
        return compositeIndex.getAnnotations(annotation);
     }
 
-    public static JAXWSDeployment getJaxwsDeployment(final DeploymentUnit unit) {
+    public static JAXWSDeployment getJaxwsDeployment(final Attachable unit) {
         JAXWSDeployment wsDeployment = unit.getAttachment(JAXWS_ENDPOINTS_KEY);
         if (wsDeployment == null) {
             wsDeployment = new JAXWSDeployment();
@@ -306,7 +308,7 @@ public final class ASHelper {
      * @return
      */
     public static JBossPortComponentMetaData getJBossWebserviceMetaDataPortComponent(
-        final DeploymentUnit unit, final String name) {
+        final Attachable unit, final String name) {
 
         if (name != null) {
             final JBossWebservicesMetaData jbossWebserviceMetaData = unit.getAttachment(JBOSS_WEBSERVICES_METADATA_KEY);
@@ -355,7 +357,7 @@ public final class ASHelper {
      * @return context root
      */
     public static String getContextRoot(final Deployment dep, final JBossWebMetaData jbossWebMD) {
-        final DeploymentUnit unit = WSHelper.getRequiredAttachment(dep, DeploymentUnit.class);
+        final WSDeploymentUnit unit = WSHelper.getRequiredAttachment(dep, WSDeploymentUnit.class);
         final JBossAppMetaData jbossAppMD = unit.getParent() == null ? null : ASHelper.getOptionalAttachment(unit.getParent(),
                 WSAttachmentKeys.JBOSS_APP_METADATA_KEY);
 
@@ -389,7 +391,7 @@ public final class ASHelper {
         return service != null ? service.getValue() : null;
     }
 
-    public static WSRefRegistry getWSRefRegistry(final DeploymentUnit unit) {
+    public static WSRefRegistry getWSRefRegistry(final Attachable unit) {
         WSRefRegistry refRegistry = unit.getAttachment(WSAttachmentKeys.WS_REFREGISTRY);
         if (refRegistry == null) {
             refRegistry = WSRefRegistry.newInstance();

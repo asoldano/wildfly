@@ -25,7 +25,7 @@ import static org.jboss.as.webservices.util.ASHelper.getOptionalAttachment;
 import static org.jboss.as.webservices.util.WSAttachmentKeys.JMS_ENDPOINT_METADATA_KEY;
 import static org.jboss.wsf.spi.deployment.EndpointType.JAXWS_JSE;
 
-import org.jboss.as.server.deployment.DeploymentUnit;
+import org.jboss.as.webservices.deployers.WSDeploymentUnit;
 import org.jboss.as.webservices.logging.WSLogger;
 import org.jboss.wsf.spi.deployment.Deployment;
 import org.jboss.wsf.spi.metadata.jms.JMSEndpointMetaData;
@@ -43,7 +43,7 @@ final class DeploymentModelBuilderJAXWS_JMS extends AbstractDeploymentModelBuild
     }
 
     @Override
-    protected void build(final Deployment dep, final DeploymentUnit unit) {
+    protected void build(final Deployment dep, final WSDeploymentUnit unit) {
         // propagate
         final JMSEndpointsMetaData jmsEndpointsMD = getOptionalAttachment(unit, JMS_ENDPOINT_METADATA_KEY);
         dep.addAttachment(JMSEndpointsMetaData.class, jmsEndpointsMD);

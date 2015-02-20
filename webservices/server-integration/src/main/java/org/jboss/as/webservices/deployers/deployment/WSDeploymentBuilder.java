@@ -26,7 +26,7 @@ import static org.jboss.as.webservices.util.ASHelper.getJaxwsPojos;
 import static org.jboss.as.webservices.util.ASHelper.getOptionalAttachment;
 import static org.jboss.as.webservices.util.WSAttachmentKeys.JMS_ENDPOINT_METADATA_KEY;
 
-import org.jboss.as.server.deployment.DeploymentUnit;
+import org.jboss.as.webservices.deployers.WSDeploymentUnit;
 import org.jboss.as.webservices.logging.WSLogger;
 import org.jboss.wsf.spi.metadata.jms.JMSEndpointsMetaData;
 
@@ -51,7 +51,7 @@ public final class WSDeploymentBuilder {
         return WSDeploymentBuilder.SINGLETON;
     }
 
-    public void build(final DeploymentUnit unit) {
+    public void build(final WSDeploymentUnit unit) {
         if (isJaxwsPojoDeployment(unit)) {
             WSLogger.ROOT_LOGGER.trace("Detected JAXWS POJO deployment");
             JAXWS_JSE.newDeploymentModel(unit);
@@ -66,15 +66,15 @@ public final class WSDeploymentBuilder {
         }
     }
 
-    private static boolean isJaxwsPojoDeployment(final DeploymentUnit unit) {
+    private static boolean isJaxwsPojoDeployment(final WSDeploymentUnit unit) {
         return getJaxwsPojos(unit).size() > 0;
     }
 
-    private static boolean isJaxwsEjbDeployment(final DeploymentUnit unit) {
+    private static boolean isJaxwsEjbDeployment(final WSDeploymentUnit unit) {
         return getJaxwsEjbs(unit).size() > 0;
     }
 
-    private static boolean isJaxwsJmsDeployment(final DeploymentUnit unit) {
+    private static boolean isJaxwsJmsDeployment(final WSDeploymentUnit unit) {
         final JMSEndpointsMetaData jmsEndpointsMD = getOptionalAttachment(unit, JMS_ENDPOINT_METADATA_KEY);
         if (jmsEndpointsMD != null) {
             return jmsEndpointsMD.getEndpointsMetaData().size() > 0;

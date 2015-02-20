@@ -62,7 +62,7 @@ public abstract class AbstractIntegrationProcessorJAXWS implements DeploymentUni
 
     @Override
     public void deploy(final DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException {
-        final DeploymentUnit unit = phaseContext.getDeploymentUnit();
+        final WSDeploymentUnit unit = new WSDeploymentUnitAdaptor(phaseContext.getDeploymentUnit());
         if (DeploymentTypeMarker.isType(DeploymentType.EAR, unit)) {
             return;
         }
@@ -79,9 +79,9 @@ public abstract class AbstractIntegrationProcessorJAXWS implements DeploymentUni
         // does nothing
     }
 
-    protected abstract void processAnnotation(final DeploymentUnit unit, final EEModuleDescription eeModuleDescription) throws DeploymentUnitProcessingException;
+    protected abstract void processAnnotation(final WSDeploymentUnit unit, final EEModuleDescription eeModuleDescription) throws DeploymentUnitProcessingException;
 
-    static ComponentDescription createComponentDescription(final DeploymentUnit unit, final String componentName, final String componentClassName, final String dependsOnEndpointClassName) {
+    static ComponentDescription createComponentDescription(final WSDeploymentUnit unit, final String componentName, final String componentClassName, final String dependsOnEndpointClassName) {
         final EEModuleDescription moduleDescription = getRequiredAttachment(unit, EE_MODULE_DESCRIPTION);
         // JBoss WEB processors may install fake components for WS endpoints - removing them forcibly
         moduleDescription.removeComponent(componentName, componentClassName);

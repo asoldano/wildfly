@@ -69,7 +69,7 @@ public final class WSIntegrationProcessorJAXWS_EJB implements DeploymentUnitProc
 
     @Override
     public void deploy(final DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException {
-        final DeploymentUnit unit = phaseContext.getDeploymentUnit();
+        final WSDeploymentUnit unit = new WSDeploymentUnitAdaptor(phaseContext.getDeploymentUnit());
         processAnnotation(unit, WebService.class);
         processAnnotation(unit, WebServiceProvider.class);
     }
@@ -79,7 +79,7 @@ public final class WSIntegrationProcessorJAXWS_EJB implements DeploymentUnitProc
         // does nothing
     }
     @SuppressWarnings("rawtypes")
-    private static void processAnnotation(final DeploymentUnit unit,  final Class annotationType) {
+    private static void processAnnotation(final WSDeploymentUnit unit,  final Class annotationType) {
 
         final EEModuleDescription moduleDescription = getRequiredAttachment(unit, EE_MODULE_DESCRIPTION);
         final JAXWSDeployment jaxwsDeployment = getJaxwsDeployment(unit);
@@ -133,7 +133,7 @@ public final class WSIntegrationProcessorJAXWS_EJB implements DeploymentUnitProc
         return sessionBeans;
     }
 
-    private static Set<String> getDeclaredSecurityRoles(final DeploymentUnit unit, final ClassInfo webServiceClassInfo) {
+    private static Set<String> getDeclaredSecurityRoles(final WSDeploymentUnit unit, final ClassInfo webServiceClassInfo) {
         final Set<String> securityRoles = new HashSet<String>();
 
         // process assembly-descriptor DD section

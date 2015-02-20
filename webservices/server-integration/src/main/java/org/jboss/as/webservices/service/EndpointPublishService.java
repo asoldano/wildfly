@@ -24,8 +24,8 @@ package org.jboss.as.webservices.service;
 import java.util.List;
 import java.util.Map;
 
-import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.as.web.host.WebHost;
+import org.jboss.as.webservices.deployers.WSDeploymentUnit;
 import org.jboss.as.webservices.logging.WSLogger;
 import org.jboss.as.webservices.publish.EndpointPublisherHelper;
 import org.jboss.as.webservices.util.WSServices;
@@ -55,11 +55,11 @@ public final class EndpointPublishService implements Service<Context> {
 
     private final ServiceName name;
     private volatile Context wsctx;
-    private final DeploymentUnit deploymentUnit;
+    private final WSDeploymentUnit deploymentUnit;
 
     private final InjectedValue<WebHost> hostInjector = new InjectedValue<WebHost>();
 
-    private EndpointPublishService(final String context, final DeploymentUnit deploymentUnit) {
+    private EndpointPublishService(final String context, final WSDeploymentUnit deploymentUnit) {
         this.name = WSServices.ENDPOINT_PUBLISH_SERVICE.append(context);
         this.deploymentUnit = deploymentUnit;
     }
@@ -109,7 +109,7 @@ public final class EndpointPublishService implements Service<Context> {
     public static ServiceBuilder<Context> createServiceBuilder(final ServiceTarget serviceTarget, final String context,
             final ClassLoader loader, final String hostName, final Map<String, String> urlPatternToClassName,
             JBossWebMetaData jbwmd, WebservicesMetaData wsmd, JBossWebservicesMetaData jbwsmd) {
-        final DeploymentUnit unit = EndpointDeployService.install(serviceTarget, context, loader, hostName, urlPatternToClassName, jbwmd, wsmd, jbwsmd);
+        final WSDeploymentUnit unit = EndpointDeployService.install(serviceTarget, context, loader, hostName, urlPatternToClassName, jbwmd, wsmd, jbwsmd);
         final EndpointPublishService service = new EndpointPublishService(context, unit);
         final ServiceBuilder<Context> builder = serviceTarget.addService(service.getName(), service);
         builder.addDependency(DependencyType.REQUIRED, WSServices.CONFIG_SERVICE);

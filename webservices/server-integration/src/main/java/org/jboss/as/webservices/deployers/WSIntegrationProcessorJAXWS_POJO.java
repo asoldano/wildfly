@@ -25,11 +25,11 @@ package org.jboss.as.webservices.deployers;
 import static org.jboss.as.webservices.util.ASHelper.getEndpointClassName;
 import static org.jboss.as.webservices.util.ASHelper.getEndpointName;
 import static org.jboss.as.webservices.util.ASHelper.getJBossWebMetaData;
-import static org.jboss.as.webservices.util.ASHelper.getJaxwsDeployment;
 import static org.jboss.as.webservices.util.ASHelper.getJBossWebserviceMetaDataPortComponent;
+import static org.jboss.as.webservices.util.ASHelper.getJaxwsDeployment;
 import static org.jboss.as.webservices.util.ASHelper.getRequiredAttachment;
-import static org.jboss.as.webservices.util.ASHelper.isJaxwsEndpoint;
 import static org.jboss.as.webservices.util.ASHelper.getWebserviceMetadataEJBEndpoint;
+import static org.jboss.as.webservices.util.ASHelper.isJaxwsEndpoint;
 import static org.jboss.as.webservices.util.WSAttachmentKeys.JMS_ENDPOINT_METADATA_KEY;
 import static org.jboss.as.webservices.util.WebMetaDataHelper.getServlets;
 
@@ -48,7 +48,6 @@ import org.jboss.as.ee.metadata.ClassAnnotationInformation;
 import org.jboss.as.ee.structure.DeploymentType;
 import org.jboss.as.ee.structure.DeploymentTypeMarker;
 import org.jboss.as.server.deployment.Attachments;
-import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
 import org.jboss.as.server.deployment.annotation.CompositeIndex;
 import org.jboss.as.webservices.metadata.model.EJBEndpoint;
@@ -60,9 +59,9 @@ import org.jboss.metadata.web.spec.ServletMappingMetaData;
 import org.jboss.metadata.web.spec.ServletMetaData;
 import org.jboss.msc.service.ServiceName;
 import org.jboss.ws.api.annotation.WebContext;
+import org.jboss.ws.common.utils.UrlPatternUtils;
 import org.jboss.wsf.spi.metadata.jms.JMSEndpointMetaData;
 import org.jboss.wsf.spi.metadata.jms.JMSEndpointsMetaData;
-import org.jboss.ws.common.utils.UrlPatternUtils;
 
 /**
  * @author <a href="mailto:ropalka@redhat.com">Richard Opalka</a>
@@ -75,7 +74,7 @@ public class WSIntegrationProcessorJAXWS_POJO extends AbstractIntegrationProcess
     }
 
     // @Override
-    protected void processAnnotation(final DeploymentUnit unit, final EEModuleDescription moduleDescription)
+    protected void processAnnotation(final WSDeploymentUnit unit, final EEModuleDescription moduleDescription)
             throws DeploymentUnitProcessingException {
         if (!DeploymentTypeMarker.isType(DeploymentType.WAR, unit)) {
             return;
@@ -188,7 +187,7 @@ public class WSIntegrationProcessorJAXWS_POJO extends AbstractIntegrationProcess
 
     }
 
-    private boolean exclude(final DeploymentUnit unit, final EEModuleClassDescription classDescription) {
+    private boolean exclude(final WSDeploymentUnit unit, final EEModuleClassDescription classDescription) {
         //exclude if it's ejb3 and jms endpoint
         ClassInfo classInfo = null;
         ClassAnnotationInformation<WebService, WebServiceAnnotationInfo> annotationInfo = classDescription
@@ -207,7 +206,7 @@ public class WSIntegrationProcessorJAXWS_POJO extends AbstractIntegrationProcess
         return false;
     }
 
-    private static String getUrlPattern(final String servletName, final DeploymentUnit unit) {
+    private static String getUrlPattern(final String servletName, final WSDeploymentUnit unit) {
         final JBossWebMetaData jbossWebMD = getJBossWebMetaData(unit);
         for (final ServletMappingMetaData servletMappingMD : jbossWebMD.getServletMappings()) {
             if (servletName.equals(servletMappingMD.getServletName())) {
@@ -217,7 +216,7 @@ public class WSIntegrationProcessorJAXWS_POJO extends AbstractIntegrationProcess
         throw new IllegalStateException();
     }
 
-    private static boolean isJmsEndpoint(final DeploymentUnit unit, final ClassInfo classInfo) {
+    private static boolean isJmsEndpoint(final WSDeploymentUnit unit, final ClassInfo classInfo) {
         final String endpointClassName = classInfo.name().toString();
         final JMSEndpointsMetaData jmsEndpointsMD = getRequiredAttachment(unit, JMS_ENDPOINT_METADATA_KEY);
         for (final JMSEndpointMetaData endpoint : jmsEndpointsMD.getEndpointsMetaData()) {

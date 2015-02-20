@@ -31,8 +31,8 @@ import static org.jboss.as.webservices.util.WSAttachmentKeys.WEBSERVICES_METADAT
 
 import org.jboss.as.ejb3.deployment.EjbDeploymentAttachmentKeys;
 import org.jboss.as.server.deployment.Attachments;
-import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.as.server.deployment.module.ResourceRoot;
+import org.jboss.as.webservices.deployers.WSDeploymentUnit;
 import org.jboss.as.webservices.logging.WSLogger;
 import org.jboss.as.webservices.metadata.model.JAXWSDeployment;
 import org.jboss.as.webservices.util.VirtualFileAdaptor;
@@ -83,7 +83,7 @@ abstract class AbstractDeploymentModelBuilder implements DeploymentModelBuilder 
      *
      * @param unit deployment unit
      */
-    public final void newDeploymentModel(final DeploymentUnit unit) {
+    public final void newDeploymentModel(final WSDeploymentUnit unit) {
         final ArchiveDeployment dep;
         if (unit.hasAttachment(DEPLOYMENT_KEY)) {
             dep = (ArchiveDeployment) unit.getAttachment(DEPLOYMENT_KEY);
@@ -95,8 +95,8 @@ abstract class AbstractDeploymentModelBuilder implements DeploymentModelBuilder 
         this.build(dep, unit);
     }
 
-    private void propagateAttachments(final DeploymentUnit unit, final ArchiveDeployment dep) {
-        dep.addAttachment(DeploymentUnit.class, unit);
+    private void propagateAttachments(final WSDeploymentUnit unit, final ArchiveDeployment dep) {
+        dep.addAttachment(WSDeploymentUnit.class, unit);
         unit.putAttachment(DEPLOYMENT_KEY, dep);
 
         final JBossWebMetaData webMD = getJBossWebMetaData(unit);
@@ -121,7 +121,7 @@ abstract class AbstractDeploymentModelBuilder implements DeploymentModelBuilder 
      * @param dep webservice deployment
      * @param unit deployment unit
      */
-    protected abstract void build(Deployment dep, DeploymentUnit unit);
+    protected abstract void build(Deployment dep, WSDeploymentUnit unit);
 
     /**
      * Creates new Http Web Service endpoint.
@@ -170,7 +170,7 @@ abstract class AbstractDeploymentModelBuilder implements DeploymentModelBuilder 
      * @param unit deployment unit
      * @return archive deployment
      */
-    private ArchiveDeployment newDeployment(final DeploymentUnit unit) {
+    private ArchiveDeployment newDeployment(final WSDeploymentUnit unit) {
         WSLogger.ROOT_LOGGER.tracef("Creating new unified WS deployment model for %s", unit);
         final ResourceRoot deploymentRoot = unit.getAttachment(Attachments.DEPLOYMENT_ROOT);
         final VirtualFile root = deploymentRoot != null ? deploymentRoot.getRoot() : null;

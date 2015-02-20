@@ -28,13 +28,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.jboss.as.server.CurrentServiceContainer;
-import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.as.web.host.ServletBuilder;
 import org.jboss.as.web.host.WebDeploymentBuilder;
 import org.jboss.as.web.host.WebDeploymentController;
 import org.jboss.as.web.host.WebHost;
 import org.jboss.as.webservices.logging.WSLogger;
 import org.jboss.as.webservices.deployers.EndpointServiceDeploymentAspect;
+import org.jboss.as.webservices.deployers.WSDeploymentUnit;
 import org.jboss.as.webservices.deployers.deployment.DeploymentAspectsProvider;
 import org.jboss.as.webservices.deployers.deployment.WSDeploymentBuilder;
 import org.jboss.as.webservices.service.EndpointService;
@@ -110,7 +110,7 @@ public final class EndpointPublisherImpl implements EndpointPublisher {
     protected Context publish(ServiceTarget target, String context, ClassLoader loader,
             Map<String, String> urlPatternToClassNameMap, JBossWebMetaData jbwmd, WebservicesMetaData metadata, JBossWebservicesMetaData jbwsMetadata)
             throws Exception {
-        DeploymentUnit unit = doPrepare(context, loader, urlPatternToClassNameMap, jbwmd, metadata, jbwsMetadata);
+        WSDeploymentUnit unit = doPrepare(context, loader, urlPatternToClassNameMap, jbwmd, metadata, jbwsMetadata);
         doDeploy(target, unit);
         return doPublish(target, unit);
     }
@@ -130,7 +130,7 @@ public final class EndpointPublisherImpl implements EndpointPublisher {
      * @param jbwsMetadata
      * @return
      */
-    protected DeploymentUnit doPrepare(String context, ClassLoader loader,
+    protected WSDeploymentUnit doPrepare(String context, ClassLoader loader,
             Map<String, String> urlPatternToClassNameMap, JBossWebMetaData jbwmd, WebservicesMetaData metadata, JBossWebservicesMetaData jbwsMetadata) {
         ClassLoader origClassLoader = WildFlySecurityManager.getCurrentContextClassLoaderPrivileged();
         WSEndpointDeploymentUnit unit = new WSEndpointDeploymentUnit(loader, context, urlPatternToClassNameMap, jbwmd, metadata, jbwsMetadata);
@@ -150,7 +150,7 @@ public final class EndpointPublisherImpl implements EndpointPublisher {
      * @param target
      * @param unit
      */
-    protected void doDeploy(ServiceTarget target, DeploymentUnit unit) {
+    protected void doDeploy(ServiceTarget target, WSDeploymentUnit unit) {
         List<DeploymentAspect> aspects = getDeploymentAspects();
         ClassLoader origClassLoader = WildFlySecurityManager.getCurrentContextClassLoaderPrivileged();
         Deployment dep = null;
@@ -177,7 +177,7 @@ public final class EndpointPublisherImpl implements EndpointPublisher {
      * @return
      * @throws Exception
      */
-    protected Context doPublish(ServiceTarget target, DeploymentUnit unit) throws Exception {
+    protected Context doPublish(ServiceTarget target, WSDeploymentUnit unit) throws Exception {
         Deployment deployment = unit.getAttachment(WSAttachmentKeys.DEPLOYMENT_KEY);
         List<Endpoint> endpoints = deployment.getService().getEndpoints();
         //If we're running in a Service, that will already have proper dependencies set on the installed endpoint services,
@@ -193,7 +193,7 @@ public final class EndpointPublisherImpl implements EndpointPublisher {
         return new Context(unit.getAttachment(WSAttachmentKeys.JBOSSWEB_METADATA_KEY).getContextRoot(), endpoints);
     }
 
-    private static WebDeploymentController startWebApp(WebHost host, DeploymentUnit unit) throws Exception {
+    private static WebDeploymentController startWebApp(WebHost host, WSDeploymentUnit unit) throws Exception {
         WebDeploymentBuilder deployment = new WebDeploymentBuilder();
         WebDeploymentController handle;
         try {
@@ -272,7 +272,7 @@ public final class EndpointPublisherImpl implements EndpointPublisher {
      * @param context
      * @throws Exception
      */
-    protected void undeploy(DeploymentUnit unit) throws Exception {
+    protected void undeploy(WSDeploymentUnit unit) throws Exception {
         undeploy(unit.getAttachment(WSAttachmentKeys.DEPLOYMENT_KEY));
     }
 
