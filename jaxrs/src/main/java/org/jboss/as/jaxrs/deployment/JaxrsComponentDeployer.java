@@ -22,7 +22,14 @@
 
 package org.jboss.as.jaxrs.deployment;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import javax.ws.rs.HttpMethod;
+import javax.ws.rs.Path;
 
 import org.jboss.as.ee.component.Attachments;
 import org.jboss.as.ee.component.ComponentDescription;
@@ -35,7 +42,7 @@ import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
 import org.jboss.as.server.deployment.DeploymentUnitProcessor;
 import org.jboss.modules.Module;
-import org.jboss.resteasy.util.GetRestful;
+import org.jboss.wsf.spi.metadata.JAXRSDeploymentMetadata;
 
 import static org.jboss.as.jaxrs.logging.JaxrsLogger.JAXRS_LOGGER;
 
@@ -67,12 +74,12 @@ public class JaxrsComponentDeployer implements DeploymentUnitProcessor {
         }
 
 
-        final ResteasyDeploymentData resteasy = deploymentUnit.getAttachment(JaxrsAttachments.RESTEASY_DEPLOYMENT_DATA);
-        if (resteasy == null) {
+        final JAXRSDeploymentMetadata jaxrsDepMD = deploymentUnit.getAttachment(JaxrsAttachments.JAXRS_DEPLOYMENT_DATA);
+        if (jaxrsDepMD == null) {
             return;
         }
         // right now I only support resources
-        if (!resteasy.isScanResources()) return;
+        if (!jaxrsDepMD.isScanResources()) return;
 
         final EEModuleDescription moduleDescription = deploymentUnit.getAttachment(Attachments.EE_MODULE_DESCRIPTION);
         if (moduleDescription == null) {
@@ -131,9 +138,9 @@ public class JaxrsComponentDeployer implements DeploymentUnitProcessor {
                 StringBuilder buf = new StringBuilder();
                 buf.append(jndiName).append(";").append(component.getComponentClassName()).append(";").append("true");
 
-                resteasy.getScannedJndiComponentResources().add(buf.toString());
+                jaxrsDepMD.getScannedJndiComponentResources().add(buf.toString());
                 // make sure its removed from list
-                resteasy.getScannedResourceClasses().remove(component.getComponentClassName());
+                jaxrsDepMD.getScannedResourceClasses().remove(component.getComponentClassName());
             } else if (component instanceof ManagedBeanComponentDescription) {
                 String jndiName = "java:app/" + moduleDescription.getModuleName() + "/" + component.getComponentName();
 
@@ -141,9 +148,9 @@ public class JaxrsComponentDeployer implements DeploymentUnitProcessor {
                 StringBuilder buf = new StringBuilder();
                 buf.append(jndiName).append(";").append(component.getComponentClassName()).append(";").append("true");
 
-                resteasy.getScannedJndiComponentResources().add(buf.toString());
+                jaxrsDepMD.getScannedJndiComponentResources().add(buf.toString());
                 // make sure its removed from list
-                resteasy.getScannedResourceClasses().remove(component.getComponentClassName());
+                jaxrsDepMD.getScannedResourceClasses().remove(component.getComponentClassName());
             }
         }
     }
@@ -162,6 +169,98 @@ public class JaxrsComponentDeployer implements DeploymentUnitProcessor {
     @Override
     public void undeploy(DeploymentUnit context) {
 
+    }
+    
+    private static final class GetRestful
+    {
+       /**
+        * Given a class, search itself and implemented interfaces for jax-rs annotations.
+        *
+        * @param clazz
+        * @return list of class and interfaces that have jax-rs annotations
+        */
+       public static Class<?> getRootResourceClass(Class<?> clazz)
+       {
+          return getClassWithAnnotation(clazz, Path.class);
+       }
+
+       /**
+        * Given a class, search itself and implemented interfaces for jax-rs annotations.
+        *
+        * @param clazz
+        * @return list of class and interfaces that have jax-rs annotations
+        */
+       public static Class<?>[] getSubResourceClasses(Class<?> clazz)
+       {
+           List<Class<?>> classes = new ArrayList<Class<?>>();
+           // check class & superclasses for JAX-RS annotations
+           for (Class<?> actualClass = clazz; isTopObject(actualClass); actualClass = actualClass.getSuperclass()) {
+               if (hasJAXRSAnnotations(actualClass))
+                  return new Class<?>[]{actualClass};
+           }
+
+           // ok, no @Path or @HttpMethods so look in interfaces.
+           for (Class<?> intf : clazz.getInterfaces()) {
+               if (hasJAXRSAnnotations(intf))
+                   classes.add(intf);
+           }
+           return classes.toArray(new Class<?>[classes.size()]);
+       }
+
+       private static boolean isTopObject(Class<?> actualClass)
+       {
+          return actualClass != null && actualClass != Object.class;
+       }
+
+       private static boolean hasJAXRSAnnotations(Class<?> c)
+       {
+          if (c.isAnnotationPresent(Path.class))
+          {
+             return true;
+          }
+          for (Method method : c.isInterface() ? c.getMethods() : c.getDeclaredMethods())
+          {
+             if (method.isAnnotationPresent(Path.class))
+             {
+                return true;
+             }
+             for (Annotation ann : method.getAnnotations())
+             {
+                if (ann.annotationType().isAnnotationPresent(HttpMethod.class))
+                {
+                   return true;
+                }
+             }
+          }
+          return false;
+       }
+
+       public static boolean isRootResource(Class<?> clazz)
+       {
+          return getRootResourceClass(clazz) != null;
+       }
+       
+       private static Class<?> getClassWithAnnotation(Class<?> clazz, Class<? extends Annotation> annotation)
+       {
+          if (clazz.isAnnotationPresent(annotation))
+          {
+             return clazz;
+          }
+          for (Class<?> intf : clazz.getInterfaces())
+          {
+             if (intf.isAnnotationPresent(annotation))
+             {
+                return intf;
+             }
+          }
+          Class<?> superClass = clazz.getSuperclass();
+          if (superClass != Object.class && superClass != null)
+          {
+             return getClassWithAnnotation(superClass, annotation);
+          }
+          return null;
+
+       }
     }
 
 }

@@ -51,8 +51,9 @@ import org.jboss.metadata.web.jboss.JBossWebMetaData;
 import org.jboss.metadata.web.spec.FilterMetaData;
 import org.jboss.metadata.web.spec.ServletMappingMetaData;
 import org.jboss.modules.ModuleIdentifier;
-import org.jboss.resteasy.plugins.server.servlet.HttpServlet30Dispatcher;
-import org.jboss.resteasy.plugins.server.servlet.ResteasyContextParameters;
+import org.jboss.wsf.spi.metadata.JAXRSDeploymentMetadata;
+//import org.jboss.resteasy.plugins.server.servlet.HttpServlet30Dispatcher;
+//import org.jboss.resteasy.plugins.server.servlet.ResteasyContextParameters;
 
 import static org.jboss.as.jaxrs.logging.JaxrsLogger.JAXRS_LOGGER;
 
@@ -66,9 +67,9 @@ import org.jboss.as.jaxrs.JaxrsExtension;
 public class JaxrsIntegrationProcessor implements DeploymentUnitProcessor {
     private static final String JAX_RS_SERVLET_NAME = "javax.ws.rs.core.Application";
     private static final String SERVLET_INIT_PARAM = "javax.ws.rs.Application";
-    public static final String RESTEASY_SCAN = "resteasy.scan";
-    public static final String RESTEASY_SCAN_RESOURCES = "resteasy.scan.resources";
-    public static final String RESTEASY_SCAN_PROVIDERS = "resteasy.scan.providers";
+//    public static final String RESTEASY_SCAN = "resteasy.scan";
+//    public static final String RESTEASY_SCAN_RESOURCES = "resteasy.scan.resources";
+//    public static final String RESTEASY_SCAN_PROVIDERS = "resteasy.scan.providers";
 
     @Override
     public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException {
@@ -86,40 +87,40 @@ public class JaxrsIntegrationProcessor implements DeploymentUnitProcessor {
         final WarMetaData warMetaData = deploymentUnit.getAttachment(WarMetaData.ATTACHMENT_KEY);
         final JBossWebMetaData webdata = warMetaData.getMergedJBossWebMetaData();
 
-        final ResteasyDeploymentData resteasy = deploymentUnit.getAttachment(JaxrsAttachments.RESTEASY_DEPLOYMENT_DATA);
+        final JAXRSDeploymentMetadata jaxrsDepMD = deploymentUnit.getAttachment(JaxrsAttachments.JAXRS_DEPLOYMENT_DATA);
 
-        if (resteasy == null)
+        if (jaxrsDepMD == null)
             return;
 
         deploymentUnit.getDeploymentSubsystemModel(JaxrsExtension.SUBSYSTEM_NAME);
-        //remove the resteasy.scan parameter
-        //because it is not needed
-        final List<ParamValueMetaData> params = webdata.getContextParams();
-        boolean entityExpandEnabled = false;
-        if (params != null) {
-            Iterator<ParamValueMetaData> it = params.iterator();
-            while (it.hasNext()) {
-                final ParamValueMetaData param = it.next();
-                if (param.getParamName().equals(RESTEASY_SCAN)) {
-                    it.remove();
-                } else if (param.getParamName().equals(RESTEASY_SCAN_RESOURCES)) {
-                    it.remove();
-                } else if (param.getParamName().equals(RESTEASY_SCAN_PROVIDERS)) {
-                    it.remove();
-                } else if(param.getParamName().equals(ResteasyContextParameters.RESTEASY_EXPAND_ENTITY_REFERENCES)) {
-                    entityExpandEnabled = true;
-                }
-            }
-        }
+//        //remove the resteasy.scan parameter
+//        //because it is not needed
+//        final List<ParamValueMetaData> params = webdata.getContextParams();
+//        boolean entityExpandEnabled = false;
+//        if (params != null) {
+//            Iterator<ParamValueMetaData> it = params.iterator();
+//            while (it.hasNext()) {
+//                final ParamValueMetaData param = it.next();
+//                if (param.getParamName().equals(RESTEASY_SCAN)) {
+//                    it.remove();
+//                } else if (param.getParamName().equals(RESTEASY_SCAN_RESOURCES)) {
+//                    it.remove();
+//                } else if (param.getParamName().equals(RESTEASY_SCAN_PROVIDERS)) {
+//                    it.remove();
+//                } else if(param.getParamName().equals(ResteasyContextParameters.RESTEASY_EXPAND_ENTITY_REFERENCES)) {
+//                    entityExpandEnabled = true;
+//                }
+//            }
+//        }
+//
+//        //don't expand entity references by default
+//        if(!entityExpandEnabled) {
+//            setContextParameter(webdata, ResteasyContextParameters.RESTEASY_EXPAND_ENTITY_REFERENCES, "false");
+//        }
 
-        //don't expand entity references by default
-        if(!entityExpandEnabled) {
-            setContextParameter(webdata, ResteasyContextParameters.RESTEASY_EXPAND_ENTITY_REFERENCES, "false");
-        }
 
-
-        final Map<ModuleIdentifier, ResteasyDeploymentData> attachmentMap = parent.getAttachment(JaxrsAttachments.ADDITIONAL_RESTEASY_DEPLOYMENT_DATA);
-        final List<ResteasyDeploymentData> additionalData = new ArrayList<ResteasyDeploymentData>();
+        final Map<ModuleIdentifier, JAXRSDeploymentMetadata> attachmentMap = parent.getAttachment(JaxrsAttachments.ADDITIONAL_JAXRS_DEPLOYMENT_DATA);
+        final List<JAXRSDeploymentMetadata> additionalData = new ArrayList<JAXRSDeploymentMetadata>();
         final ModuleSpecification moduleSpec = deploymentUnit.getAttachment(Attachments.MODULE_SPECIFICATION);
         if (moduleSpec != null && attachmentMap != null) {
             final Set<ModuleIdentifier> identifiers = new HashSet<ModuleIdentifier>();
@@ -132,11 +133,11 @@ public class JaxrsIntegrationProcessor implements DeploymentUnitProcessor {
                     }
                 }
             }
-            resteasy.merge(additionalData);
+            jaxrsDepMD.merge(additionalData);
         }
-        if (!resteasy.getScannedResourceClasses().isEmpty()) {
+        if (!jaxrsDepMD.getScannedResourceClasses().isEmpty()) {
             StringBuffer buf = null;
-            for (String resource : resteasy.getScannedResourceClasses()) {
+            for (String resource : jaxrsDepMD.getScannedResourceClasses()) {
                 if (buf == null) {
                     buf = new StringBuffer();
                     buf.append(resource);
@@ -145,12 +146,12 @@ public class JaxrsIntegrationProcessor implements DeploymentUnitProcessor {
                 }
             }
             String resources = buf.toString();
-            JAXRS_LOGGER.debugf("Adding JAX-RS resource classes: %s", resources);
-            setContextParameter(webdata, ResteasyContextParameters.RESTEASY_SCANNED_RESOURCES, resources);
+            JAXRS_LOGGER.infof("Adding JAX-RS resource classes: %s", resources);
+//            setContextParameter(webdata, ResteasyContextParameters.RESTEASY_SCANNED_RESOURCES, resources);
         }
-        if (!resteasy.getScannedProviderClasses().isEmpty()) {
+        if (!jaxrsDepMD.getScannedProviderClasses().isEmpty()) {
             StringBuffer buf = null;
-            for (String provider : resteasy.getScannedProviderClasses()) {
+            for (String provider : jaxrsDepMD.getScannedProviderClasses()) {
                 if (buf == null) {
                     buf = new StringBuffer();
                     buf.append(provider);
@@ -159,13 +160,13 @@ public class JaxrsIntegrationProcessor implements DeploymentUnitProcessor {
                 }
             }
             String providers = buf.toString();
-            JAXRS_LOGGER.debugf("Adding JAX-RS provider classes: %s", providers);
-            setContextParameter(webdata, ResteasyContextParameters.RESTEASY_SCANNED_PROVIDERS, providers);
+            JAXRS_LOGGER.infof("Adding JAX-RS provider classes: %s", providers);
+//            setContextParameter(webdata, ResteasyContextParameters.RESTEASY_SCANNED_PROVIDERS, providers);
         }
 
-        if (!resteasy.getScannedJndiComponentResources().isEmpty()) {
+        if (!jaxrsDepMD.getScannedJndiComponentResources().isEmpty()) {
             StringBuffer buf = null;
-            for (String resource : resteasy.getScannedJndiComponentResources()) {
+            for (String resource : jaxrsDepMD.getScannedJndiComponentResources()) {
                 if (buf == null) {
                     buf = new StringBuffer();
                     buf.append(resource);
@@ -174,20 +175,20 @@ public class JaxrsIntegrationProcessor implements DeploymentUnitProcessor {
                 }
             }
             String providers = buf.toString();
-            JAXRS_LOGGER.debugf("Adding JAX-RS jndi component resource classes: %s", providers);
-            setContextParameter(webdata, ResteasyContextParameters.RESTEASY_SCANNED_JNDI_RESOURCES, providers);
+            JAXRS_LOGGER.infof("Adding JAX-RS jndi component resource classes: %s", providers);
+//            setContextParameter(webdata, ResteasyContextParameters.RESTEASY_SCANNED_JNDI_RESOURCES, providers);
         }
 
-        if (!resteasy.isUnwrappedExceptionsParameterSet()) {
-            setContextParameter(webdata, ResteasyContextParameters.RESTEASY_UNWRAPPED_EXCEPTIONS, "javax.ejb.EJBException");
+        if (!jaxrsDepMD.isUnwrappedExceptionsParameterSet()) {
+//            setContextParameter(webdata, ResteasyContextParameters.RESTEASY_UNWRAPPED_EXCEPTIONS, "javax.ejb.EJBException");
         }
 
-        if (resteasy.hasBootClasses() || resteasy.isDispatcherCreated())
+        if (jaxrsDepMD.hasBootClasses() || jaxrsDepMD.isDispatcherCreated())
             return;
 
         // ignore any non-annotated Application class that doesn't have a servlet mapping
-        Set<Class<? extends Application>> applicationClassSet = new HashSet<>();
-        for (Class<? extends Application> clazz : resteasy.getScannedApplicationClasses()) {
+        Set<Class<?>> applicationClassSet = new HashSet<>();
+        for (Class<?> clazz : jaxrsDepMD.getScannedApplicationClasses()) {
             if (clazz.isAnnotationPresent(ApplicationPath.class) || servletMappingsExist(webdata, clazz.getName())) {
                 applicationClassSet.add(clazz);
             }
@@ -204,7 +205,7 @@ public class JaxrsIntegrationProcessor implements DeploymentUnitProcessor {
             return;
         }
 
-        for (Class<? extends Application> applicationClass : applicationClassSet) {
+        for (Class<?> applicationClass : applicationClassSet) {
             String servletName = null;
 
             servletName = applicationClass.getName();
@@ -232,7 +233,7 @@ public class JaxrsIntegrationProcessor implements DeploymentUnitProcessor {
                         pathValue += "/*";
                     }
                     patterns.add(pathValue);
-                    setServletInitParam(servlet, "resteasy.servlet.mapping.prefix", prefix);
+                    setServletInitParam(servlet, "resteasy.servlet.mapping.prefix", prefix); //TODO!!!
                     ServletMappingMetaData mapping = new ServletMappingMetaData();
                     mapping.setServletName(servletName);
                     mapping.setUrlPatterns(patterns);
@@ -279,7 +280,7 @@ public class JaxrsIntegrationProcessor implements DeploymentUnitProcessor {
                                 if (realPattern.endsWith("*")) {
                                     realPattern = realPattern.substring(0, realPattern.length() - 1);
                                 }
-                                setServletInitParam(servlet, "resteasy.servlet.mapping.prefix", realPattern);
+                                setServletInitParam(servlet, "resteasy.servlet.mapping.prefix", realPattern); //TODO!!!!
                             }
                         }
                     }

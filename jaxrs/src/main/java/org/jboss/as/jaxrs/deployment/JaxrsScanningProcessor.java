@@ -53,14 +53,12 @@ import org.jboss.metadata.web.spec.ServletMetaData;
 import org.jboss.modules.Module;
 import org.jboss.modules.ModuleIdentifier;
 import org.jboss.modules.ModuleLoadException;
-import org.jboss.resteasy.plugins.server.servlet.HttpServlet30Dispatcher;
-import org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrapClasses;
-import org.jboss.resteasy.plugins.server.servlet.ResteasyContextParameters;
+import org.jboss.wsf.spi.metadata.JAXRSDeploymentMetadata;
 
 import static org.jboss.as.jaxrs.logging.JaxrsLogger.JAXRS_LOGGER;
-import static org.jboss.resteasy.plugins.server.servlet.ResteasyContextParameters.RESTEASY_SCAN;
-import static org.jboss.resteasy.plugins.server.servlet.ResteasyContextParameters.RESTEASY_SCAN_PROVIDERS;
-import static org.jboss.resteasy.plugins.server.servlet.ResteasyContextParameters.RESTEASY_SCAN_RESOURCES;
+//import static org.jboss.resteasy.plugins.server.servlet.ResteasyContextParameters.RESTEASY_SCAN;
+//import static org.jboss.resteasy.plugins.server.servlet.ResteasyContextParameters.RESTEASY_SCAN_PROVIDERS;
+//import static org.jboss.resteasy.plugins.server.servlet.ResteasyContextParameters.RESTEASY_SCAN_RESOURCES;
 
 /**
  * Processor that finds jax-rs classes in the deployment
@@ -80,31 +78,31 @@ public class JaxrsScanningProcessor implements DeploymentUnitProcessor {
             return;
         }
         final DeploymentUnit parent = deploymentUnit.getParent() == null ? deploymentUnit : deploymentUnit.getParent();
-        final Map<ModuleIdentifier, ResteasyDeploymentData> deploymentData;
+        final Map<ModuleIdentifier, JAXRSDeploymentMetadata> deploymentData;
         if (deploymentUnit.getParent() == null) {
-            deploymentData = Collections.synchronizedMap(new HashMap<ModuleIdentifier, ResteasyDeploymentData>());
-            deploymentUnit.putAttachment(JaxrsAttachments.ADDITIONAL_RESTEASY_DEPLOYMENT_DATA, deploymentData);
+            deploymentData = Collections.synchronizedMap(new HashMap<ModuleIdentifier, JAXRSDeploymentMetadata>());
+            deploymentUnit.putAttachment(JaxrsAttachments.ADDITIONAL_JAXRS_DEPLOYMENT_DATA, deploymentData);
         } else {
-            deploymentData = parent.getAttachment(JaxrsAttachments.ADDITIONAL_RESTEASY_DEPLOYMENT_DATA);
+            deploymentData = parent.getAttachment(JaxrsAttachments.ADDITIONAL_JAXRS_DEPLOYMENT_DATA);
         }
 
         final ModuleIdentifier moduleIdentifier = deploymentUnit.getAttachment(Attachments.MODULE_IDENTIFIER);
 
-        ResteasyDeploymentData resteasyDeploymentData = new ResteasyDeploymentData();
+        JAXRSDeploymentMetadata jaxrsDeploymentData = new JAXRSDeploymentMetadata();
         final WarMetaData warMetaData = deploymentUnit.getAttachment(WarMetaData.ATTACHMENT_KEY);
         final Module module = deploymentUnit.getAttachment(Attachments.MODULE);
 
         try {
 
             if (warMetaData == null) {
-                resteasyDeploymentData.setScanAll(true);
-                scan(deploymentUnit, module.getClassLoader(), resteasyDeploymentData);
-                deploymentData.put(moduleIdentifier, resteasyDeploymentData);
+                jaxrsDeploymentData.setScanAll(true);
+                scan(deploymentUnit, module.getClassLoader(), jaxrsDeploymentData);
+                deploymentData.put(moduleIdentifier, jaxrsDeploymentData);
             } else {
-                scanWebDeployment(deploymentUnit, warMetaData.getMergedJBossWebMetaData(), module.getClassLoader(), resteasyDeploymentData);
-                scan(deploymentUnit, module.getClassLoader(), resteasyDeploymentData);
+                scanWebDeployment(deploymentUnit, warMetaData.getMergedJBossWebMetaData(), module.getClassLoader(), jaxrsDeploymentData);
+                scan(deploymentUnit, module.getClassLoader(), jaxrsDeploymentData);
             }
-            deploymentUnit.putAttachment(JaxrsAttachments.RESTEASY_DEPLOYMENT_DATA, resteasyDeploymentData);
+            deploymentUnit.putAttachment(JaxrsAttachments.JAXRS_DEPLOYMENT_DATA, jaxrsDeploymentData);
         } catch (ModuleLoadException e) {
             throw new DeploymentUnitProcessingException(e);
         }
@@ -115,91 +113,91 @@ public class JaxrsScanningProcessor implements DeploymentUnitProcessor {
 
     }
 
-    public static final Set<String> BOOT_CLASSES = new HashSet<String>();
+//    public static final Set<String> BOOT_CLASSES = new HashSet<String>();
+//
+//    static {
+//        Collections.addAll(BOOT_CLASSES, ResteasyBootstrapClasses.BOOTSTRAP_CLASSES);
+//    }
 
-    static {
-        Collections.addAll(BOOT_CLASSES, ResteasyBootstrapClasses.BOOTSTRAP_CLASSES);
-    }
+//    /**
+//     * If any servlet/filter classes are declared, then we probably don't want to scan.
+//     */
+//    protected boolean hasBootClasses(JBossWebMetaData webdata) throws DeploymentUnitProcessingException {
+//        if (webdata.getServlets() != null) {
+//            for (ServletMetaData servlet : webdata.getServlets()) {
+//                String servletClass = servlet.getServletClass();
+//                if (BOOT_CLASSES.contains(servletClass))
+//                    return true;
+//            }
+//        }
+//        if (webdata.getFilters() != null) {
+//            for (FilterMetaData filter : webdata.getFilters()) {
+//                if (BOOT_CLASSES.contains(filter.getFilterClass()))
+//                    return true;
+//            }
+//        }
+//        return false;
+//
+//    }
 
-    /**
-     * If any servlet/filter classes are declared, then we probably don't want to scan.
-     */
-    protected boolean hasBootClasses(JBossWebMetaData webdata) throws DeploymentUnitProcessingException {
-        if (webdata.getServlets() != null) {
-            for (ServletMetaData servlet : webdata.getServlets()) {
-                String servletClass = servlet.getServletClass();
-                if (BOOT_CLASSES.contains(servletClass))
-                    return true;
-            }
-        }
-        if (webdata.getFilters() != null) {
-            for (FilterMetaData filter : webdata.getFilters()) {
-                if (BOOT_CLASSES.contains(filter.getFilterClass()))
-                    return true;
-            }
-        }
-        return false;
-
-    }
-
-    protected void scanWebDeployment(final DeploymentUnit du, final JBossWebMetaData webdata, final ClassLoader classLoader, final ResteasyDeploymentData resteasyDeploymentData) throws DeploymentUnitProcessingException {
+    protected void scanWebDeployment(final DeploymentUnit du, final JBossWebMetaData webdata, final ClassLoader classLoader, final JAXRSDeploymentMetadata jaxrsDeploymentData) throws DeploymentUnitProcessingException {
 
 
         // If there is a resteasy boot class in web.xml, then the default should be to not scan
         // make sure this call happens before checkDeclaredApplicationClassAsServlet!!!
-        boolean hasBoot = hasBootClasses(webdata);
-        resteasyDeploymentData.setBootClasses(hasBoot);
+        boolean hasBoot = false; //hasBootClasses(webdata); TODO!!
+        jaxrsDeploymentData.setBootClasses(hasBoot);
 
         Class<?> declaredApplicationClass = checkDeclaredApplicationClassAsServlet(webdata, classLoader);
         // Assume that checkDeclaredApplicationClassAsServlet created the dispatcher
         if (declaredApplicationClass != null) {
-            resteasyDeploymentData.setDispatcherCreated(true);
+            jaxrsDeploymentData.setDispatcherCreated(true);
         }
 
         // set scanning on only if there are no boot classes
         if (!hasBoot && !webdata.isMetadataComplete()) {
-            resteasyDeploymentData.setScanAll(true);
-            resteasyDeploymentData.setScanProviders(true);
-            resteasyDeploymentData.setScanResources(true);
+            jaxrsDeploymentData.setScanAll(true);
+            jaxrsDeploymentData.setScanProviders(true);
+            jaxrsDeploymentData.setScanResources(true);
         }
 
-        // check resteasy configuration flags
-
-        List<ParamValueMetaData> contextParams = webdata.getContextParams();
-
-        if (contextParams != null) {
-            for (ParamValueMetaData param : contextParams) {
-                if (param.getParamName().equals(RESTEASY_SCAN)) {
-                    resteasyDeploymentData.setScanAll(valueOf(RESTEASY_SCAN, param.getParamValue()));
-                } else if (param.getParamName().equals(ResteasyContextParameters.RESTEASY_SCAN_PROVIDERS)) {
-                    resteasyDeploymentData.setScanProviders(valueOf(RESTEASY_SCAN_PROVIDERS, param.getParamValue()));
-                } else if (param.getParamName().equals(RESTEASY_SCAN_RESOURCES)) {
-                    resteasyDeploymentData.setScanResources(valueOf(RESTEASY_SCAN_RESOURCES, param.getParamValue()));
-                } else if (param.getParamName().equals(ResteasyContextParameters.RESTEASY_UNWRAPPED_EXCEPTIONS)) {
-                    resteasyDeploymentData.setUnwrappedExceptionsParameterSet(true);
-                }
-            }
-        }
+//        // check resteasy configuration flags
+//
+//        List<ParamValueMetaData> contextParams = webdata.getContextParams();
+//
+//        if (contextParams != null) {
+//            for (ParamValueMetaData param : contextParams) {
+//                if (param.getParamName().equals(RESTEASY_SCAN)) {
+//                    resteasyDeploymentData.setScanAll(valueOf(RESTEASY_SCAN, param.getParamValue()));
+//                } else if (param.getParamName().equals(ResteasyContextParameters.RESTEASY_SCAN_PROVIDERS)) {
+//                    resteasyDeploymentData.setScanProviders(valueOf(RESTEASY_SCAN_PROVIDERS, param.getParamValue()));
+//                } else if (param.getParamName().equals(RESTEASY_SCAN_RESOURCES)) {
+//                    resteasyDeploymentData.setScanResources(valueOf(RESTEASY_SCAN_RESOURCES, param.getParamValue()));
+//                } else if (param.getParamName().equals(ResteasyContextParameters.RESTEASY_UNWRAPPED_EXCEPTIONS)) {
+//                    resteasyDeploymentData.setUnwrappedExceptionsParameterSet(true);
+//                }
+//            }
+//        }
 
     }
 
-    protected void scan(final DeploymentUnit du, final ClassLoader classLoader, final ResteasyDeploymentData resteasyDeploymentData)
+    protected void scan(final DeploymentUnit du, final ClassLoader classLoader, final JAXRSDeploymentMetadata jaxrsDeploymentData)
             throws DeploymentUnitProcessingException, ModuleLoadException {
 
         final CompositeIndex index = du.getAttachment(Attachments.COMPOSITE_ANNOTATION_INDEX);
 
-        if (!resteasyDeploymentData.shouldScan()) {
+        if (!jaxrsDeploymentData.shouldScan()) {
             return;
         }
 
-        if (!resteasyDeploymentData.isDispatcherCreated()) {
+        if (!jaxrsDeploymentData.isDispatcherCreated()) {
             final Set<ClassInfo> applicationClasses = index.getAllKnownSubclasses(APPLICATION);
             try {
                 for (ClassInfo c : applicationClasses) {
                     if (Modifier.isAbstract(c.flags())) continue;
                     @SuppressWarnings("unchecked")
                     Class<? extends Application> scanned = (Class<? extends Application>) classLoader.loadClass(c.name().toString());
-                    resteasyDeploymentData.getScannedApplicationClasses().add(scanned);
+                    jaxrsDeploymentData.getScannedApplicationClasses().add(scanned);
                 }
             } catch (ClassNotFoundException e) {
                 throw JaxrsLogger.JAXRS_LOGGER.cannotLoadApplicationClass(e);
@@ -208,10 +206,10 @@ public class JaxrsScanningProcessor implements DeploymentUnitProcessor {
 
         List<AnnotationInstance> resources = null;
         List<AnnotationInstance> providers = null;
-        if (resteasyDeploymentData.isScanResources()) {
+        if (jaxrsDeploymentData.isScanResources()) {
             resources = index.getAnnotations(JaxrsAnnotations.PATH.getDotName());
         }
-        if (resteasyDeploymentData.isScanProviders()) {
+        if (jaxrsDeploymentData.isScanProviders()) {
             providers = index.getAnnotations(JaxrsAnnotations.PROVIDER.getDotName());
         }
 
@@ -236,7 +234,7 @@ public class JaxrsScanningProcessor implements DeploymentUnitProcessor {
                     continue;
                 }
                 if (!Modifier.isInterface(info.flags())) {
-                    resteasyDeploymentData.getScannedResourceClasses().add(info.name().toString());
+                    jaxrsDeploymentData.getScannedResourceClasses().add(info.name().toString());
                 } else {
                     pathInterfaces.add(info);
                 }
@@ -253,7 +251,7 @@ public class JaxrsScanningProcessor implements DeploymentUnitProcessor {
                         continue;
                     }
                     if (!Modifier.isInterface(info.flags())) {
-                        resteasyDeploymentData.getScannedProviderClasses().add(info.name().toString());
+                        jaxrsDeploymentData.getScannedProviderClasses().add(info.name().toString());
                     }
                 } else {
                     JAXRS_LOGGER.classAnnotationNotFound("@Provider", e.target());
@@ -271,7 +269,7 @@ public class JaxrsScanningProcessor implements DeploymentUnitProcessor {
                     //we can't pick up on programatically added decorators, but that is such an edge case it should not really matter
                     continue;
                 }
-                resteasyDeploymentData.getScannedResourceClasses().add(implementor.name().toString());
+                jaxrsDeploymentData.getScannedResourceClasses().add(implementor.name().toString());
             }
         }
     }
@@ -311,17 +309,17 @@ public class JaxrsScanningProcessor implements DeploymentUnitProcessor {
     }
 
 
-    private boolean valueOf(String paramName, String value) throws DeploymentUnitProcessingException {
-        if (value == null) {
-            throw JaxrsLogger.JAXRS_LOGGER.invalidParamValue(paramName, value);
-        }
-        if (value.toLowerCase(Locale.ENGLISH).equals("true")) {
-            return true;
-        } else if (value.toLowerCase(Locale.ENGLISH).equals("false")) {
-            return false;
-        } else {
-            throw JaxrsLogger.JAXRS_LOGGER.invalidParamValue(paramName, value);
-        }
-    }
+//    private boolean valueOf(String paramName, String value) throws DeploymentUnitProcessingException {
+//        if (value == null) {
+//            throw JaxrsLogger.JAXRS_LOGGER.invalidParamValue(paramName, value);
+//        }
+//        if (value.toLowerCase(Locale.ENGLISH).equals("true")) {
+//            return true;
+//        } else if (value.toLowerCase(Locale.ENGLISH).equals("false")) {
+//            return false;
+//        } else {
+//            throw JaxrsLogger.JAXRS_LOGGER.invalidParamValue(paramName, value);
+//        }
+//    }
 
 }

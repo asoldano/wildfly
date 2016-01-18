@@ -22,7 +22,6 @@
 
 package org.jboss.as.jaxrs.logging;
 
-import org.jboss.as.jaxrs.deployment.JaxrsSpringProcessor;
 import javax.ws.rs.core.Application;
 import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
 import org.jboss.jandex.AnnotationTarget;
@@ -155,7 +154,11 @@ public interface JaxrsLogger extends BasicLogger {
     @Message(id = 12, value = "No spring integration jar found")
     DeploymentUnitProcessingException noSpringIntegrationJar();
 
-    @LogMessage(level = WARN)
-    @Message(id = 13, value = "The context param " + JaxrsSpringProcessor.DISABLE_PROPERTY + " is deprecated, and will be removed in a future release. Please use " + JaxrsSpringProcessor.ENABLE_PROPERTY + " instead")
-    void disablePropertyDeprecated();
+//    @LogMessage(level = WARN)
+//    @Message(id = 13, value = "The context param " + JaxrsSpringProcessor.DISABLE_PROPERTY + " is deprecated, and will be removed in a future release. Please use " + JaxrsSpringProcessor.ENABLE_PROPERTY + " instead")
+//    void disablePropertyDeprecated();
+    
+    @Message(id = 14, value = "Cannot create servlet delegate: %s")
+    IllegalStateException cannotInstantiateServletDelegate(@Cause Throwable cause, String className);
+
 }

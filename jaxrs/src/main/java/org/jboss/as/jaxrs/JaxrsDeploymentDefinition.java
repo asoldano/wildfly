@@ -49,10 +49,10 @@ import org.jboss.as.controller.registry.ManagementResourceRegistration;
 import org.jboss.dmr.ModelNode;
 import org.jboss.dmr.ModelType;
 import org.jboss.msc.service.ServiceController;
-import org.jboss.resteasy.core.ResourceInvoker;
-import org.jboss.resteasy.core.ResourceMethodInvoker;
-import org.jboss.resteasy.core.ResourceMethodRegistry;
-import org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher;
+//import org.jboss.resteasy.core.ResourceInvoker;
+//import org.jboss.resteasy.core.ResourceMethodInvoker;
+//import org.jboss.resteasy.core.ResourceMethodRegistry;
+//import org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher;
 import org.wildfly.extension.undertow.UndertowExtension;
 import org.wildfly.extension.undertow.UndertowService;
 import org.wildfly.extension.undertow.deployment.UndertowDeploymentService;
@@ -89,89 +89,89 @@ public class JaxrsDeploymentDefinition extends SimpleResourceDefinition {
     public void registerOperations(ManagementResourceRegistration resourceRegistration) {
         super.registerOperations(resourceRegistration);
         if(showResources) {
-            resourceRegistration.registerOperationHandler(ShowJaxrsResourcesHandler.DEFINITION, new ShowJaxrsResourcesHandler());
+//            resourceRegistration.registerOperationHandler(ShowJaxrsResourcesHandler.DEFINITION, new ShowJaxrsResourcesHandler());
         }
     }
 
-    static class ShowJaxrsResourcesHandler implements OperationStepHandler {
-        public static final SimpleOperationDefinition DEFINITION = new SimpleOperationDefinitionBuilder(SHOW_RESOURCES,
-                JaxrsExtension.getResolver("deployment"))
-                .setReadOnly()
-                .setRuntimeOnly()
-                .setReplyType(ModelType.LIST)
-                .setReplyParameters(JAXRS_RESOURCE).build();
-
-
-        void handle(ModelNode response, String contextRootPath, Collection<String> servletMappings, String mapping, List<ResourceInvoker> resources) {
-            for (ResourceInvoker resourceInvoker : resources) {
-                ResourceMethodInvoker resource = (ResourceMethodInvoker) resourceInvoker;
-                final ModelNode node = new ModelNode();
-                node.get(CLASSNAME.getName()).set(resource.getResourceClass().getCanonicalName());
-                node.get(PATH.getName()).set(mapping);
-                for (String servletMapping : servletMappings) {
-                    String method = formatMethod(resource, servletMapping, mapping, contextRootPath);
-                    for (final String httpMethod : resource.getHttpMethods()) {
-                        node.get(METHODS.getName()).add(String.format(method, httpMethod));
-                    }
-                }
-                response.add(node);
-            }
-        }
-
-        private String formatMethod(ResourceMethodInvoker resource, String servletMapping, String path, String contextRootPath) {
-            StringBuilder builder = new StringBuilder();
-            builder.append("%1$s ");
-            builder.append(contextRootPath).append('/').append(servletMapping.replaceAll("\\*", "")).append(path);
-            builder.append(" - ").append(resource.getResourceClass().getCanonicalName()).append('.').append(resource.getMethod().getName()).append('(');
-            if (resource.getMethod().getParameterTypes().length > 0) {
-                builder.append("...");
-            }
-            builder.append(')');
-            return builder.toString().replaceAll("//", "/");
-        }
-
-        @Override
-        public void execute(final OperationContext context, final ModelNode operation) throws OperationFailedException {
-            final PathAddress address = PathAddress.pathAddress(operation.get(ModelDescriptionConstants.OP_ADDR));
-            //Getting Undertow deployment Model to access Servlet informations.
-            final ModelNode subModel = context.readResourceFromRoot(address.subAddress(0, address.size() - 1).append(
-                    SUBSYSTEM, UndertowExtension.SUBSYSTEM_NAME), false).getModel();
-            final String host = VIRTUAL_HOST.resolveModelAttribute(context, subModel).asString();
-            final String contextPath = CONTEXT_ROOT.resolveModelAttribute(context, subModel).asString();
-            final String server = SERVER.resolveModelAttribute(context, subModel).asString();
-
-            final ServiceController<?> controller = context.getServiceRegistry(false).getService(UndertowService.deploymentServiceName(server, host, contextPath));
-            final UndertowDeploymentService deploymentService = (UndertowDeploymentService) controller.getService();
-            Servlet resteasyServlet = null;
-            Handle handle = deploymentService.getDeployment().getThreadSetupAction().setup(null);
-            try {
-                for (Map.Entry<String, ServletHandler> servletHandler : deploymentService.getDeployment().getServlets().getServletHandlers().entrySet()) {
-                    if (HttpServletDispatcher.class.isAssignableFrom(servletHandler.getValue().getManagedServlet().getServletInfo().getServletClass())) {
-                        resteasyServlet = (Servlet) servletHandler.getValue().getManagedServlet().getServlet().getInstance();
-                        break;
-                    }
-                }
-                if (resteasyServlet != null) {
-                    final Collection<String> servletMappings = resteasyServlet.getServletConfig().getServletContext().getServletRegistration(resteasyServlet.getServletConfig().getServletName()).getMappings();
-                    final ResourceMethodRegistry registry = (ResourceMethodRegistry) ((HttpServletDispatcher) resteasyServlet).getDispatcher().getRegistry();
-                    context.addStep(new OperationStepHandler() {
-                        @Override
-                        public void execute(final OperationContext context, final ModelNode operation) throws OperationFailedException {
-                            if (registry != null) {
-                                final ModelNode response = new ModelNode();
-                                for (Map.Entry<String, List<ResourceInvoker>> resource : registry.getBounded().entrySet()) {
-                                    handle(response, contextPath, servletMappings, resource.getKey(), resource.getValue());
-                                }
-                                context.getResult().set(response);
-                            }
-                        }
-                    }, OperationContext.Stage.RUNTIME);
-                }
-            } catch (ServletException ex) {
-                throw new RuntimeException(ex);
-            } finally {
-                handle.tearDown();
-            }
-        }
-    }
+//    static class ShowJaxrsResourcesHandler implements OperationStepHandler {
+//        public static final SimpleOperationDefinition DEFINITION = new SimpleOperationDefinitionBuilder(SHOW_RESOURCES,
+//                JaxrsExtension.getResolver("deployment"))
+//                .setReadOnly()
+//                .setRuntimeOnly()
+//                .setReplyType(ModelType.LIST)
+//                .setReplyParameters(JAXRS_RESOURCE).build();
+//
+//
+//        void handle(ModelNode response, String contextRootPath, Collection<String> servletMappings, String mapping, List<ResourceInvoker> resources) {
+//            for (ResourceInvoker resourceInvoker : resources) {
+//                ResourceMethodInvoker resource = (ResourceMethodInvoker) resourceInvoker;
+//                final ModelNode node = new ModelNode();
+//                node.get(CLASSNAME.getName()).set(resource.getResourceClass().getCanonicalName());
+//                node.get(PATH.getName()).set(mapping);
+//                for (String servletMapping : servletMappings) {
+//                    String method = formatMethod(resource, servletMapping, mapping, contextRootPath);
+//                    for (final String httpMethod : resource.getHttpMethods()) {
+//                        node.get(METHODS.getName()).add(String.format(method, httpMethod));
+//                    }
+//                }
+//                response.add(node);
+//            }
+//        }
+//
+//        private String formatMethod(ResourceMethodInvoker resource, String servletMapping, String path, String contextRootPath) {
+//            StringBuilder builder = new StringBuilder();
+//            builder.append("%1$s ");
+//            builder.append(contextRootPath).append('/').append(servletMapping.replaceAll("\\*", "")).append(path);
+//            builder.append(" - ").append(resource.getResourceClass().getCanonicalName()).append('.').append(resource.getMethod().getName()).append('(');
+//            if (resource.getMethod().getParameterTypes().length > 0) {
+//                builder.append("...");
+//            }
+//            builder.append(')');
+//            return builder.toString().replaceAll("//", "/");
+//        }
+//
+//        @Override
+//        public void execute(final OperationContext context, final ModelNode operation) throws OperationFailedException {
+//            final PathAddress address = PathAddress.pathAddress(operation.get(ModelDescriptionConstants.OP_ADDR));
+//            //Getting Undertow deployment Model to access Servlet informations.
+//            final ModelNode subModel = context.readResourceFromRoot(address.subAddress(0, address.size() - 1).append(
+//                    SUBSYSTEM, UndertowExtension.SUBSYSTEM_NAME), false).getModel();
+//            final String host = VIRTUAL_HOST.resolveModelAttribute(context, subModel).asString();
+//            final String contextPath = CONTEXT_ROOT.resolveModelAttribute(context, subModel).asString();
+//            final String server = SERVER.resolveModelAttribute(context, subModel).asString();
+//
+//            final ServiceController<?> controller = context.getServiceRegistry(false).getService(UndertowService.deploymentServiceName(server, host, contextPath));
+//            final UndertowDeploymentService deploymentService = (UndertowDeploymentService) controller.getService();
+//            Servlet resteasyServlet = null;
+//            Handle handle = deploymentService.getDeployment().getThreadSetupAction().setup(null);
+//            try {
+//                for (Map.Entry<String, ServletHandler> servletHandler : deploymentService.getDeployment().getServlets().getServletHandlers().entrySet()) {
+//                    if (HttpServletDispatcher.class.isAssignableFrom(servletHandler.getValue().getManagedServlet().getServletInfo().getServletClass())) {
+//                        resteasyServlet = (Servlet) servletHandler.getValue().getManagedServlet().getServlet().getInstance();
+//                        break;
+//                    }
+//                }
+//                if (resteasyServlet != null) {
+//                    final Collection<String> servletMappings = resteasyServlet.getServletConfig().getServletContext().getServletRegistration(resteasyServlet.getServletConfig().getServletName()).getMappings();
+//                    final ResourceMethodRegistry registry = (ResourceMethodRegistry) ((HttpServletDispatcher) resteasyServlet).getDispatcher().getRegistry();
+//                    context.addStep(new OperationStepHandler() {
+//                        @Override
+//                        public void execute(final OperationContext context, final ModelNode operation) throws OperationFailedException {
+//                            if (registry != null) {
+//                                final ModelNode response = new ModelNode();
+//                                for (Map.Entry<String, List<ResourceInvoker>> resource : registry.getBounded().entrySet()) {
+//                                    handle(response, contextPath, servletMappings, resource.getKey(), resource.getValue());
+//                                }
+//                                context.getResult().set(response);
+//                            }
+//                        }
+//                    }, OperationContext.Stage.RUNTIME);
+//                }
+//            } catch (ServletException ex) {
+//                throw new RuntimeException(ex);
+//            } finally {
+//                handle.tearDown();
+//            }
+//        }
+//    }
 }

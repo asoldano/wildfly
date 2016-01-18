@@ -44,7 +44,7 @@ import java.util.List;
  */
 public class JaxrsCdiIntegrationProcessor implements DeploymentUnitProcessor {
 
-    public static final String CDI_INJECTOR_FACTORY_CLASS = "org.jboss.resteasy.cdi.CdiInjectorFactory";
+//    public static final String CDI_INJECTOR_FACTORY_CLASS = "org.jboss.resteasy.cdi.CdiInjectorFactory";
 
     @Override
     public void deploy(final DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException {
@@ -63,11 +63,11 @@ public class JaxrsCdiIntegrationProcessor implements DeploymentUnitProcessor {
         final JBossWebMetaData webdata = warMetaData.getMergedJBossWebMetaData();
 
         try {
-            module.getClassLoader().loadClass(CDI_INJECTOR_FACTORY_CLASS);
+//            module.getClassLoader().loadClass(CDI_INJECTOR_FACTORY_CLASS); //TODO!!!
             // don't set this param if CDI is not in classpath
             if (WeldDeploymentMarker.isWeldDeployment(deploymentUnit)) {
-                JAXRS_LOGGER.debug("Found CDI, adding injector factory class");
-                setContextParameter(webdata, "resteasy.injector.factory", CDI_INJECTOR_FACTORY_CLASS);
+                JAXRS_LOGGER.info("Found CDI, adding injector factory class");
+//                setContextParameter(webdata, "resteasy.injector.factory", CDI_INJECTOR_FACTORY_CLASS); //TODO!!!
             }
         } catch (ClassNotFoundException ignored) {
         }

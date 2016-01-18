@@ -23,6 +23,8 @@ package org.jboss.as.jaxrs.deployment;
 
 import org.jboss.as.server.deployment.AttachmentKey;
 import org.jboss.modules.ModuleIdentifier;
+import org.jboss.wsf.spi.deployment.Deployment;
+import org.jboss.wsf.spi.metadata.JAXRSDeploymentMetadata;
 
 import java.util.Map;
 
@@ -34,7 +36,8 @@ import java.util.Map;
  */
 public class JaxrsAttachments {
 
-    public static final AttachmentKey<ResteasyDeploymentData> RESTEASY_DEPLOYMENT_DATA = AttachmentKey.create(ResteasyDeploymentData.class);
-    public static final AttachmentKey<Map<ModuleIdentifier, ResteasyDeploymentData>> ADDITIONAL_RESTEASY_DEPLOYMENT_DATA = AttachmentKey.create(Map.class);
-
+    public static final AttachmentKey<JAXRSDeploymentMetadata> JAXRS_DEPLOYMENT_DATA = AttachmentKey.create(JAXRSDeploymentMetadata.class);
+    public static final AttachmentKey<Map<ModuleIdentifier, JAXRSDeploymentMetadata>> ADDITIONAL_JAXRS_DEPLOYMENT_DATA = AttachmentKey.create(Map.class);
+    public static final AttachmentKey<Deployment> JAXRS_DEPLOYMENT_KEY = AttachmentKey.create(Deployment.class);
+    public static final AttachmentKey<ClassLoader> CLASSLOADER_KEY = AttachmentKey.create(ClassLoader.class);
 }
