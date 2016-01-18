@@ -26,13 +26,11 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
 
 import org.jboss.as.ee.structure.DeploymentType;
 import org.jboss.as.ee.structure.DeploymentTypeMarker;
@@ -51,6 +49,7 @@ import org.jboss.metadata.web.jboss.JBossWebMetaData;
 import org.jboss.metadata.web.spec.FilterMetaData;
 import org.jboss.metadata.web.spec.ServletMappingMetaData;
 import org.jboss.modules.ModuleIdentifier;
+import org.jboss.wsf.spi.deployment.WSFServlet;
 import org.jboss.wsf.spi.metadata.JAXRSDeploymentMetadata;
 //import org.jboss.resteasy.plugins.server.servlet.HttpServlet30Dispatcher;
 //import org.jboss.resteasy.plugins.server.servlet.ResteasyContextParameters;
@@ -198,7 +197,7 @@ public class JaxrsIntegrationProcessor implements DeploymentUnitProcessor {
         if (applicationClassSet.size() == 0) {
             JBossServletMetaData servlet = new JBossServletMetaData();
             servlet.setName(JAX_RS_SERVLET_NAME);
-            servlet.setServletClass(HttpServlet30Dispatcher.class.getName());
+            setJBossWSServlet(servlet);
             servlet.setAsyncSupported(true);
             addServlet(webdata, servlet);
             setServletMappingPrefix(webdata, JAX_RS_SERVLET_NAME, servlet);
@@ -213,7 +212,7 @@ public class JaxrsIntegrationProcessor implements DeploymentUnitProcessor {
             // must load on startup for services like JSAPI to work
             servlet.setLoadOnStartup("" + 0);
             servlet.setName(servletName);
-            servlet.setServletClass(HttpServlet30Dispatcher.class.getName());
+            setJBossWSServlet(servlet);
             servlet.setAsyncSupported(true);
             setServletInitParam(servlet, SERVLET_INIT_PARAM, applicationClass.getName());
             addServlet(webdata, servlet);
@@ -249,6 +248,12 @@ public class JaxrsIntegrationProcessor implements DeploymentUnitProcessor {
             }
 
         }
+    }
+
+    private void setJBossWSServlet(JBossServletMetaData servlet) {
+        servlet.setServletClass(WSFServlet.class.getName());
+        setServletInitParam(servlet, WSFServlet.JAXRS_SERVLET_MODE, "true");
+        setServletInitParam(servlet, WSFServlet.STACK_SERVLET_DELEGATE_CLASS, "org.jboss.wsf.stack.cxf.JAXRSServletExt");
     }
 
     protected void setServletInitParam(JBossServletMetaData servlet, String name, String value) {

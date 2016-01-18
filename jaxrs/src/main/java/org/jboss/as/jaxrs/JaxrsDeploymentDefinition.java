@@ -20,42 +20,42 @@
  */
 package org.jboss.as.jaxrs;
 
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.SUBSYSTEM;
-import static org.wildfly.extension.undertow.DeploymentDefinition.CONTEXT_ROOT;
-import static org.wildfly.extension.undertow.DeploymentDefinition.SERVER;
-import static org.wildfly.extension.undertow.DeploymentDefinition.VIRTUAL_HOST;
+//import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.SUBSYSTEM;
+//import static org.wildfly.extension.undertow.DeploymentDefinition.CONTEXT_ROOT;
+//import static org.wildfly.extension.undertow.DeploymentDefinition.SERVER;
+//import static org.wildfly.extension.undertow.DeploymentDefinition.VIRTUAL_HOST;
 
-import io.undertow.servlet.api.ThreadSetupAction.Handle;
-import io.undertow.servlet.handlers.ServletHandler;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import javax.servlet.Servlet;
-import javax.servlet.ServletException;
+//import io.undertow.servlet.api.ThreadSetupAction.Handle;
+//import io.undertow.servlet.handlers.ServletHandler;
+//import java.util.Collection;
+//import java.util.List;
+//import java.util.Map;
+//import javax.servlet.Servlet;
+//import javax.servlet.ServletException;
 import org.jboss.as.controller.AttributeDefinition;
 import org.jboss.as.controller.ObjectTypeAttributeDefinition;
-import org.jboss.as.controller.OperationContext;
-import org.jboss.as.controller.OperationFailedException;
-import org.jboss.as.controller.OperationStepHandler;
-import org.jboss.as.controller.PathAddress;
+//import org.jboss.as.controller.OperationContext;
+//import org.jboss.as.controller.OperationFailedException;
+//import org.jboss.as.controller.OperationStepHandler;
+//import org.jboss.as.controller.PathAddress;
 import org.jboss.as.controller.ReloadRequiredRemoveStepHandler;
 import org.jboss.as.controller.SimpleAttributeDefinitionBuilder;
 import org.jboss.as.controller.SimpleListAttributeDefinition;
-import org.jboss.as.controller.SimpleOperationDefinition;
-import org.jboss.as.controller.SimpleOperationDefinitionBuilder;
+//import org.jboss.as.controller.SimpleOperationDefinition;
+//import org.jboss.as.controller.SimpleOperationDefinitionBuilder;
 import org.jboss.as.controller.SimpleResourceDefinition;
-import org.jboss.as.controller.descriptions.ModelDescriptionConstants;
+//import org.jboss.as.controller.descriptions.ModelDescriptionConstants;
 import org.jboss.as.controller.registry.ManagementResourceRegistration;
-import org.jboss.dmr.ModelNode;
+//import org.jboss.dmr.ModelNode;
 import org.jboss.dmr.ModelType;
-import org.jboss.msc.service.ServiceController;
+//import org.jboss.msc.service.ServiceController;
 //import org.jboss.resteasy.core.ResourceInvoker;
 //import org.jboss.resteasy.core.ResourceMethodInvoker;
 //import org.jboss.resteasy.core.ResourceMethodRegistry;
 //import org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher;
-import org.wildfly.extension.undertow.UndertowExtension;
-import org.wildfly.extension.undertow.UndertowService;
-import org.wildfly.extension.undertow.deployment.UndertowDeploymentService;
+//import org.wildfly.extension.undertow.UndertowExtension;
+//import org.wildfly.extension.undertow.UndertowService;
+//import org.wildfly.extension.undertow.deployment.UndertowDeploymentService;
 
 /**
  *

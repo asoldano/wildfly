@@ -40,66 +40,74 @@ import org.jboss.wsf.spi.metadata.JAXRSDeploymentMetadata;
  */
 public final class ModelDeploymentProcessor implements DeploymentUnitProcessor {
 
-	@Override
-	public void deploy(DeploymentPhaseContext phaseContext)
-			throws DeploymentUnitProcessingException {
-		final DeploymentUnit unit = phaseContext.getDeploymentUnit();
-		if (JaxrsDeploymentMarker.isJaxrsDeployment(unit)) {
-			Deployment dep = newDeployment(unit);
-			unit.putAttachment(JaxrsAttachments.JAXRS_DEPLOYMENT_KEY, dep);
-			dep.addAttachment(JAXRSDeploymentMetadata.class, unit.getAttachment(JaxrsAttachments.JAXRS_DEPLOYMENT_DATA));
-		}
-	}
+   @Override
+   public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException
+   {
+      final DeploymentUnit unit = phaseContext.getDeploymentUnit();
+      if (JaxrsDeploymentMarker.isJaxrsDeployment(unit))
+      {
+         Deployment dep = newDeployment(unit);
+         unit.putAttachment(JaxrsAttachments.JAXRS_DEPLOYMENT_KEY, dep);
+         dep.addAttachment(JAXRSDeploymentMetadata.class, unit.getAttachment(JaxrsAttachments.JAXRS_DEPLOYMENT_DATA));
+      }
+   }
 
-	@Override
-	public void undeploy(DeploymentUnit context) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	private JAXRSDeployment newDeployment(final DeploymentUnit unit) throws DeploymentUnitProcessingException {
-        JaxrsLogger.JAXRS_LOGGER.tracef("Creating new unified JAXRS deployment model for %s", unit);
-        final ClassLoader classLoader;
-        final Module module = unit.getAttachment(Attachments.MODULE);
-        if (module == null) {
-            classLoader = unit.getAttachment(JaxrsAttachments.CLASSLOADER_KEY);
-            if (classLoader == null) {
-                throw new DeploymentUnitProcessingException("missing clasloader!"); //TODO i18n
-            }
-        } else {
-            classLoader = module.getClassLoader();
-        }
+   @Override
+   public void undeploy(DeploymentUnit context) {
+      // TODO Auto-generated method stub
 
-        final JAXRSDeployment dep = new JAXRSDeployment(unit.getName(), classLoader);
+   }
 
-        return dep;
-    }
-	
-	//TODO this will be removed later; we should likely be using the same Deployment that's used for jaxws
-	private final class JAXRSDeployment extends AbstractExtensible implements Deployment {
+   private JAXRSDeployment newDeployment(final DeploymentUnit unit) throws DeploymentUnitProcessingException
+   {
+      JaxrsLogger.JAXRS_LOGGER.tracef("Creating new unified JAXRS deployment model for %s", unit);
+      final ClassLoader classLoader;
+      final Module module = unit.getAttachment(Attachments.MODULE);
+      if (module == null)
+      {
+         classLoader = unit.getAttachment(JaxrsAttachments.CLASSLOADER_KEY);
+         if (classLoader == null)
+         {
+            throw new DeploymentUnitProcessingException("missing clasloader!"); //TODO i18n
+         }
+      }
+      else
+      {
+         classLoader = module.getClassLoader();
+      }
 
-		private String name;
-		private ClassLoader classLoader;
-		
-		public JAXRSDeployment(String name, ClassLoader classLoader) {
-			this.name = name;
-			this.classLoader = classLoader;
-		}
-		
-		@Override
-		public String getSimpleName() {
-			return name;
-		}
+      final JAXRSDeployment dep = new JAXRSDeployment(unit.getName(), classLoader);
 
-		@Override
-		public ClassLoader getClassLoader() {
-			return classLoader;
-		}
+      return dep;
+   }
 
-		@Override
-		public Service getService() {
-			return null;
-		}
-		
-	}
+   //TODO this will be removed later; we should likely be using the same Deployment that's used for jaxws
+   private final class JAXRSDeployment extends AbstractExtensible implements Deployment
+   {
+
+      private String name;
+
+      private ClassLoader classLoader;
+
+      public JAXRSDeployment(String name, ClassLoader classLoader) {
+         this.name = name;
+         this.classLoader = classLoader;
+      }
+
+      @Override
+      public String getSimpleName() {
+         return name;
+      }
+
+      @Override
+      public ClassLoader getClassLoader() {
+         return classLoader;
+      }
+
+      @Override
+      public Service getService() {
+         return null;
+      }
+
+   }
 }

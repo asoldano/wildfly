@@ -62,15 +62,15 @@ public class JaxrsCdiIntegrationProcessor implements DeploymentUnitProcessor {
         final WarMetaData warMetaData = deploymentUnit.getAttachment(WarMetaData.ATTACHMENT_KEY);
         final JBossWebMetaData webdata = warMetaData.getMergedJBossWebMetaData();
 
-        try {
+//        try {
 //            module.getClassLoader().loadClass(CDI_INJECTOR_FACTORY_CLASS); //TODO!!!
             // don't set this param if CDI is not in classpath
             if (WeldDeploymentMarker.isWeldDeployment(deploymentUnit)) {
                 JAXRS_LOGGER.info("Found CDI, adding injector factory class");
 //                setContextParameter(webdata, "resteasy.injector.factory", CDI_INJECTOR_FACTORY_CLASS); //TODO!!!
             }
-        } catch (ClassNotFoundException ignored) {
-        }
+//        } catch (ClassNotFoundException ignored) {
+//        }
     }
 
 

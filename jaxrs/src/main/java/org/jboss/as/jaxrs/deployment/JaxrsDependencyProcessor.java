@@ -35,7 +35,7 @@ import org.jboss.modules.ModuleLoader;
 
 /**
  * Deployment processor which adds a module dependencies for modules needed for JAX-RS deployments.
- * 
+ *
  * TODO!! revisit to add only the really needed stuff (likely nothing, the jaxrs api module will need
  * to act as the jaxws one, basically being able to pull cxf without exposing it by default).
  *

@@ -55,7 +55,7 @@ class JaxrsSubsystemAdd extends AbstractBoottimeAddStepHandler {
 
     protected void performBoottime(final OperationContext context, ModelNode operation, Resource resource) {
 
-    	ModuleJAXRSClassLoaderProvider.register();
+        ModuleJAXRSClassLoaderProvider.register();
 //        final ServiceTarget serviceTarget = context.getServiceTarget();
         context.addStep(new AbstractDeploymentChainStep() {
             public void execute(DeploymentProcessorTarget processorTarget) {
@@ -67,9 +67,9 @@ class JaxrsSubsystemAdd extends AbstractBoottimeAddStepHandler {
                 processorTarget.addDeploymentProcessor(JaxrsExtension.SUBSYSTEM_NAME, Phase.POST_MODULE, Phase.POST_MODULE_JAXRS_CDI_INTEGRATION, new JaxrsCdiIntegrationProcessor());
                 processorTarget.addDeploymentProcessor(JaxrsExtension.SUBSYSTEM_NAME, Phase.INSTALL, Phase.INSTALL_JAXRS_DEPLOYMENT, new JaxrsIntegrationProcessor());
                 processorTarget.addDeploymentProcessor(JaxrsExtension.SUBSYSTEM_NAME, Phase.INSTALL, Phase.INSTALL_JAXRS_DEPLOYMENT + 1, new ModelDeploymentProcessor()); //TODO Phase
-				processorTarget.addDeploymentProcessor(JaxrsExtension.SUBSYSTEM_NAME, Phase.INSTALL, Phase.INSTALL_JAXRS_DEPLOYMENT + 2,
-								new AspectDeploymentProcessor("org.jboss.wsf.stack.cxf.deployment.JAXRSBusDeploymentAspect")); // TODO Phase
-                
+                processorTarget.addDeploymentProcessor(JaxrsExtension.SUBSYSTEM_NAME, Phase.INSTALL, Phase.INSTALL_JAXRS_DEPLOYMENT + 2,
+                      new AspectDeploymentProcessor("org.jboss.wsf.stack.cxf.deployment.JAXRSBusDeploymentAspect")); // TODO Phase
+
             }
         }, OperationContext.Stage.RUNTIME);
     }

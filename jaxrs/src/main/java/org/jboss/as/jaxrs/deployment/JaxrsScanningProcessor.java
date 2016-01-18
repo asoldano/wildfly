@@ -27,7 +27,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -48,11 +47,11 @@ import org.jboss.jandex.DotName;
 import org.jboss.jandex.MethodInfo;
 import org.jboss.metadata.javaee.spec.ParamValueMetaData;
 import org.jboss.metadata.web.jboss.JBossWebMetaData;
-import org.jboss.metadata.web.spec.FilterMetaData;
 import org.jboss.metadata.web.spec.ServletMetaData;
 import org.jboss.modules.Module;
 import org.jboss.modules.ModuleIdentifier;
 import org.jboss.modules.ModuleLoadException;
+import org.jboss.wsf.spi.deployment.WSFServlet;
 import org.jboss.wsf.spi.metadata.JAXRSDeploymentMetadata;
 
 import static org.jboss.as.jaxrs.logging.JaxrsLogger.JAXRS_LOGGER;
@@ -290,22 +289,32 @@ public class JaxrsScanningProcessor implements DeploymentUnitProcessor {
                 throw new DeploymentUnitProcessingException(e);
             }
             if (Application.class.isAssignableFrom(clazz)) {
-                servlet.setServletClass(HttpServlet30Dispatcher.class.getName());
+                setJBossWSServlet(servlet);
                 servlet.setAsyncSupported(true);
-                ParamValueMetaData param = new ParamValueMetaData();
-                param.setParamName("javax.ws.rs.Application");
-                param.setParamValue(servletClass);
-                List<ParamValueMetaData> params = servlet.getInitParam();
-                if (params == null) {
-                    params = new ArrayList<ParamValueMetaData>();
-                    servlet.setInitParam(params);
-                }
-                params.add(param);
+                setServletInitParam(servlet, "javax.ws.rs.Application", servletClass);
 
                 return clazz;
             }
         }
         return null;
+    }
+
+    private void setJBossWSServlet(ServletMetaData servlet) {
+        servlet.setServletClass(WSFServlet.class.getName());
+        setServletInitParam(servlet, WSFServlet.JAXRS_SERVLET_MODE, "true");
+        setServletInitParam(servlet, WSFServlet.STACK_SERVLET_DELEGATE_CLASS, "org.jboss.wsf.stack.cxf.JAXRSServletExt");
+    }
+
+    protected void setServletInitParam(ServletMetaData servlet, String name, String value) {
+        ParamValueMetaData param = new ParamValueMetaData();
+        param.setParamName(name);
+        param.setParamValue(value);
+        List<ParamValueMetaData> params = servlet.getInitParam();
+        if (params == null) {
+            params = new ArrayList<ParamValueMetaData>();
+            servlet.setInitParam(params);
+        }
+        params.add(param);
     }
 
 

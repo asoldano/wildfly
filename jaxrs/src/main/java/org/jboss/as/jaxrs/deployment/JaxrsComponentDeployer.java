@@ -170,97 +170,93 @@ public class JaxrsComponentDeployer implements DeploymentUnitProcessor {
     public void undeploy(DeploymentUnit context) {
 
     }
-    
-    private static final class GetRestful
-    {
-       /**
-        * Given a class, search itself and implemented interfaces for jax-rs annotations.
-        *
-        * @param clazz
-        * @return list of class and interfaces that have jax-rs annotations
-        */
-       public static Class<?> getRootResourceClass(Class<?> clazz)
-       {
-          return getClassWithAnnotation(clazz, Path.class);
-       }
 
-       /**
-        * Given a class, search itself and implemented interfaces for jax-rs annotations.
-        *
-        * @param clazz
-        * @return list of class and interfaces that have jax-rs annotations
-        */
-       public static Class<?>[] getSubResourceClasses(Class<?> clazz)
-       {
-           List<Class<?>> classes = new ArrayList<Class<?>>();
-           // check class & superclasses for JAX-RS annotations
-           for (Class<?> actualClass = clazz; isTopObject(actualClass); actualClass = actualClass.getSuperclass()) {
-               if (hasJAXRSAnnotations(actualClass))
-                  return new Class<?>[]{actualClass};
-           }
+   private static final class GetRestful {
+      /**
+       * Given a class, search itself and implemented interfaces for jax-rs annotations.
+       *
+       * @param clazz
+       * @return list of class and interfaces that have jax-rs annotations
+       */
+      public static Class<?> getRootResourceClass(Class<?> clazz) {
+         return getClassWithAnnotation(clazz, Path.class);
+      }
 
-           // ok, no @Path or @HttpMethods so look in interfaces.
-           for (Class<?> intf : clazz.getInterfaces()) {
-               if (hasJAXRSAnnotations(intf))
-                   classes.add(intf);
-           }
-           return classes.toArray(new Class<?>[classes.size()]);
-       }
+      /**
+       * Given a class, search itself and implemented interfaces for jax-rs annotations.
+       *
+       * @param clazz
+       * @return list of class and interfaces that have jax-rs annotations
+       */
+      public static Class<?>[] getSubResourceClasses(Class<?> clazz) {
+         List<Class<?>> classes = new ArrayList<Class<?>>();
+         // check class & superclasses for JAX-RS annotations
+         for (Class<?> actualClass = clazz; isTopObject(actualClass); actualClass = actualClass.getSuperclass()) {
+            if (hasJAXRSAnnotations(actualClass))
+               return new Class<?>[]
+               {actualClass};
+         }
 
-       private static boolean isTopObject(Class<?> actualClass)
-       {
-          return actualClass != null && actualClass != Object.class;
-       }
+         // ok, no @Path or @HttpMethods so look in interfaces.
+         for (Class<?> intf : clazz.getInterfaces())
+         {
+            if (hasJAXRSAnnotations(intf))
+               classes.add(intf);
+         }
+         return classes.toArray(new Class<?>[classes.size()]);
+      }
 
-       private static boolean hasJAXRSAnnotations(Class<?> c)
-       {
-          if (c.isAnnotationPresent(Path.class))
-          {
-             return true;
-          }
-          for (Method method : c.isInterface() ? c.getMethods() : c.getDeclaredMethods())
-          {
-             if (method.isAnnotationPresent(Path.class))
-             {
-                return true;
-             }
-             for (Annotation ann : method.getAnnotations())
-             {
-                if (ann.annotationType().isAnnotationPresent(HttpMethod.class))
-                {
-                   return true;
-                }
-             }
-          }
-          return false;
-       }
+      private static boolean isTopObject(Class<?> actualClass) {
+         return actualClass != null && actualClass != Object.class;
+      }
 
-       public static boolean isRootResource(Class<?> clazz)
-       {
-          return getRootResourceClass(clazz) != null;
-       }
-       
-       private static Class<?> getClassWithAnnotation(Class<?> clazz, Class<? extends Annotation> annotation)
-       {
-          if (clazz.isAnnotationPresent(annotation))
-          {
-             return clazz;
-          }
-          for (Class<?> intf : clazz.getInterfaces())
-          {
-             if (intf.isAnnotationPresent(annotation))
-             {
-                return intf;
-             }
-          }
-          Class<?> superClass = clazz.getSuperclass();
-          if (superClass != Object.class && superClass != null)
-          {
-             return getClassWithAnnotation(superClass, annotation);
-          }
-          return null;
+      private static boolean hasJAXRSAnnotations(Class<?> c) {
+         if (c.isAnnotationPresent(Path.class))
+         {
+            return true;
+         }
+         for (Method method : c.isInterface() ? c.getMethods() : c.getDeclaredMethods())
+         {
+            if (method.isAnnotationPresent(Path.class))
+            {
+               return true;
+            }
+            for (Annotation ann : method.getAnnotations())
+            {
+               if (ann.annotationType().isAnnotationPresent(HttpMethod.class))
+               {
+                  return true;
+               }
+            }
+         }
+         return false;
+      }
 
-       }
-    }
+      public static boolean isRootResource(Class<?> clazz) {
+         return getRootResourceClass(clazz) != null;
+      }
+
+      private static Class<?> getClassWithAnnotation(Class<?> clazz, Class<? extends Annotation> annotation)
+      {
+         if (clazz.isAnnotationPresent(annotation))
+         {
+            return clazz;
+         }
+         for (Class<?> intf : clazz.getInterfaces())
+         {
+            if (intf.isAnnotationPresent(annotation))
+            {
+               return intf;
+            }
+         }
+         Class<?> superClass = clazz.getSuperclass();
+         if (superClass != Object.class && superClass != null)
+         {
+            return getClassWithAnnotation(superClass, annotation);
+         }
+         return null;
+
+      }
+   }
 
 }
