@@ -36,6 +36,7 @@
         <artifact name="${org.apache.cxf:cxf-rt-databinding-aegis}"/>
         <artifact name="${org.apache.cxf:cxf-rt-databinding-jaxb}"/>
         <artifact name="${org.apache.cxf:cxf-rt-frontend-jaxws}"/>
+        <artifact name="${org.apache.cxf:cxf-rt-frontend-jaxrs}"/>
         <artifact name="${org.apache.cxf:cxf-rt-frontend-simple}"/>
         <artifact name="${org.apache.cxf:cxf-rt-management}"/>
         <artifact name="${org.apache.cxf:cxf-rt-security?jandex}"/>
@@ -80,6 +81,7 @@
         <module name="javax.xml.soap.api" />
         <module name="javax.xml.stream.api" />
         <module name="javax.xml.ws.api" />
+        <module name="javax.ws.rs.api" />
         <module name="org.apache.commons.lang" />
         <module name="org.apache.httpcomponents"/>
         <module name="org.apache.neethi" />

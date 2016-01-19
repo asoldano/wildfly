@@ -22,7 +22,6 @@
 package org.wildfly.extension.rts.deployment;
 
 import org.jboss.as.jaxrs.deployment.JaxrsAttachments;
-import org.jboss.as.jaxrs.deployment.ResteasyDeploymentData;
 import org.jboss.as.server.deployment.Attachments;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentUnit;
@@ -35,6 +34,7 @@ import org.jboss.jandex.DotName;
 import org.jboss.narayana.rest.bridge.inbound.EJBExceptionMapper;
 import org.jboss.narayana.rest.bridge.inbound.InboundBridgeFilter;
 import org.jboss.narayana.rest.bridge.inbound.TransactionalExceptionMapper;
+import org.jboss.wsf.spi.metadata.JAXRSDeploymentMetadata;
 
 import javax.ejb.TransactionAttribute;
 import javax.transaction.Transactional;
@@ -100,7 +100,7 @@ public class InboundBridgeDeploymentProcessor implements DeploymentUnitProcessor
     }
 
     private void registerProviders(final DeploymentUnit deploymentUnit) {
-        final ResteasyDeploymentData resteasyDeploymentData = deploymentUnit.getAttachment(JaxrsAttachments.RESTEASY_DEPLOYMENT_DATA);
+        final JAXRSDeploymentMetadata resteasyDeploymentData = deploymentUnit.getAttachment(JaxrsAttachments.JAXRS_DEPLOYMENT_DATA);
 
         if (resteasyDeploymentData != null) {
             for (final String provider : PROVIDERS) {
