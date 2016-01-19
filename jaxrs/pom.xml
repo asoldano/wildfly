@@ -122,6 +122,11 @@
         </dependency>
 
         <dependency>
+           <groupId>org.jboss.ws.cxf</groupId>
+           <artifactId>jbossws-cxf-server</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>

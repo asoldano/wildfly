@@ -28,7 +28,7 @@ import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
 import org.jboss.as.server.deployment.DeploymentUnitProcessor;
 import org.jboss.msc.service.ServiceTarget;
-import org.jboss.wsf.spi.classloading.ClassLoaderProvider;
+import org.jboss.wsf.spi.classloading.JAXRSClassLoaderProvider;
 import org.jboss.wsf.spi.deployment.Deployment;
 import org.jboss.wsf.spi.deployment.DeploymentAspect;
 import org.wildfly.security.manager.WildFlySecurityManager;
@@ -97,7 +97,7 @@ public final class AspectDeploymentProcessor implements DeploymentUnitProcessor 
         if (aspect == null) {
             try {
                 if (clazz == null) {
-                    clazz = (Class<? extends DeploymentAspect>) ClassLoaderProvider.getDefaultProvider()
+                    clazz = (Class<? extends DeploymentAspect>) JAXRSClassLoaderProvider.getDefaultProvider()
                             .getServerIntegrationClassLoader().loadClass(aspectClass);
                 }
                 aspect = clazz.newInstance();

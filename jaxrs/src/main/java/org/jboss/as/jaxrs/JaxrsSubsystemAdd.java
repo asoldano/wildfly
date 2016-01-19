@@ -68,7 +68,7 @@ class JaxrsSubsystemAdd extends AbstractBoottimeAddStepHandler {
                 processorTarget.addDeploymentProcessor(JaxrsExtension.SUBSYSTEM_NAME, Phase.INSTALL, Phase.INSTALL_JAXRS_DEPLOYMENT, new JaxrsIntegrationProcessor());
                 processorTarget.addDeploymentProcessor(JaxrsExtension.SUBSYSTEM_NAME, Phase.INSTALL, Phase.INSTALL_JAXRS_DEPLOYMENT + 1, new ModelDeploymentProcessor()); //TODO Phase
                 processorTarget.addDeploymentProcessor(JaxrsExtension.SUBSYSTEM_NAME, Phase.INSTALL, Phase.INSTALL_JAXRS_DEPLOYMENT + 2,
-                      new AspectDeploymentProcessor("org.jboss.wsf.stack.cxf.deployment.JAXRSBusDeploymentAspect")); // TODO Phase
+                      new AspectDeploymentProcessor("org.jboss.wsf.stack.cxf.deployment.aspect.JAXRSBusDeploymentAspect")); // TODO Phase
 
             }
         }, OperationContext.Stage.RUNTIME);

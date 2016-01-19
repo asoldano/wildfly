@@ -42,6 +42,7 @@
         <module name="javax.servlet.api"/>
         <module name="org.jboss.as.controller"/>
         <module name="org.jboss.as.ee"/>
+        <module name="org.jboss.ws.spi"/>
         <module name="org.wildfly.security.elytron"/>
         <module name="org.jboss.as.server"/>
         <module name="org.jboss.as.web-common"/>
@@ -53,18 +54,6 @@
         <module name="org.jboss.modules"/>
         <module name="org.jboss.msc"/>
         <module name="org.jboss.logging"/>
-        <module name="org.jboss.resteasy.resteasy-atom-provider" optional="true"/>
-        <module name="org.jboss.resteasy.resteasy-cdi" optional="true"/>
-        <module name="org.jboss.resteasy.resteasy-crypto" optional="true"/>
-        <module name="org.jboss.resteasy.resteasy-jaxrs" optional="true"/>
-        <module name="org.jboss.resteasy.resteasy-jaxb-provider" optional="true"/>
-        <module name="org.jboss.resteasy.resteasy-jackson-provider" optional="true"/>
-        <module name="org.jboss.resteasy.resteasy-jettison-provider" optional="true"/>
-        <module name="org.jboss.resteasy.resteasy-jsapi" optional="true"/>
-        <module name="org.jboss.resteasy.resteasy-multipart-provider" optional="true"/>
-        <module name="org.jboss.resteasy.resteasy-spring" optional="true" />
-        <module name="org.jboss.resteasy.resteasy-validator-provider-11" optional="true"/>
-        <module name="org.jboss.resteasy.resteasy-yaml-provider" optional="true"/>
         <module name="org.jboss.staxmapper"/>
         <module name="org.jboss.vfs"/>
     </dependencies>
