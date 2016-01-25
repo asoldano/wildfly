@@ -231,7 +231,8 @@ public class JaxrsIntegrationProcessor implements DeploymentUnitProcessor {
                     } else {
                         pathValue += "/*";
                     }
-                    patterns.add(pathValue);
+//                    patterns.add(pathValue);
+                    patterns.add("/*");
                     setServletInitParam(servlet, "resteasy.servlet.mapping.prefix", prefix); //TODO!!!
                     ServletMappingMetaData mapping = new ServletMappingMetaData();
                     mapping.setServletName(servletName);
