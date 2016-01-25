@@ -51,6 +51,8 @@
         <artifact name="${org.apache.cxf:cxf-rt-ws-policy}"/>
         <artifact name="${org.apache.cxf:cxf-rt-ws-rm}"/>
         <artifact name="${org.apache.cxf:cxf-rt-ws-security?jandex}"/>
+        <artifact name="${org.apache.cxf:cxf-rt-rs-extension-providers}"/>
+        <artifact name="${org.apache.cxf:cxf-rt-rs-json-basic}"/>
         <artifact name="${org.apache.cxf:cxf-tools-common}"/>
         <artifact name="${org.apache.cxf:cxf-tools-java2ws}"/>
         <artifact name="${org.apache.cxf:cxf-tools-validator}"/>
@@ -90,6 +92,7 @@
         <module name="org.apache.ws.xmlschema" />
         <module name="org.apache.ws.security" />
         <module name="org.apache.santuario.xmlsec" />
+        <module name="org.codehaus.jettison" />
         <module name="org.codehaus.woodstox" />
         <module name="org.joda.time" />
         <module name="org.opensaml" />
