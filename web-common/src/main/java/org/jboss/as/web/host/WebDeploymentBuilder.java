@@ -18,6 +18,7 @@ public class WebDeploymentBuilder {
     private ApplicationContextWrapper applicationContextWrapper;
     private final List<ServletBuilder> servlets = new ArrayList<>();
     private final Map<String,String> mimeTypes = new HashMap<>();
+    private final List<String> welcomePages = new ArrayList<>();
 
     public ClassLoader getClassLoader() {
         return classLoader;
@@ -59,6 +60,14 @@ public class WebDeploymentBuilder {
     }
     public void addMimeMapping(String type,String mapping){
         mimeTypes.put(type,mapping);
+    }
+
+    public List<String> getWelcomePages() {
+        return welcomePages;
+    }
+
+    public void addWelcomePage(String welcomePage) {
+        this.welcomePages.add(welcomePage);
     }
 
     public ApplicationContextWrapper getApplicationContextWrapper() {

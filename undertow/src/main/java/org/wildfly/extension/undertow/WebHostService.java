@@ -83,6 +83,9 @@ class WebHostService implements Service<WebHost>, WebHost {
             }
             d.addServlet(s);
         }
+        for (String wp : webDeploymentBuilder.getWelcomePages()) {
+            d.addWelcomePage(wp);
+        }
 
         return new WebDeploymentControllerImpl(d);
     }

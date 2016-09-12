@@ -47,6 +47,22 @@
             <groupId>org.wildfly.core</groupId>
             <artifactId>wildfly-controller</artifactId>
         </dependency>
+        
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-web-common</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.wise</groupId>
+            <artifactId>wise-gwt-gui</artifactId>
+            <classifier>classes</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-servlet</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.jboss.logging</groupId>

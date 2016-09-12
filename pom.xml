@@ -261,7 +261,9 @@
         <!-- Location relative to root that will be used for the cached legacy classpaths used by subsystem-test and core-model-test-->
         <org.jboss.model.test.classpath.cache>target/model-test-classpath-cache</org.jboss.model.test.classpath.cache>
         <version.com.github.spullara.mustache>0.8.13</version.com.github.spullara.mustache>
-        <version.wise-gwt-gui>1.0.0.Final</version.wise-gwt-gui>
+        <version.wise-core>2.1.1-SNAPSHOT</version.wise-core>
+        <version.wise-gwt-gui>1.0.1-SNAPSHOT</version.wise-gwt-gui>
+        <version.wise-gwt-libs>2.8.0.20150826</version.wise-gwt-libs>
 
     </properties>
 
@@ -6108,8 +6110,67 @@
             <dependency>
                 <groupId>org.jboss.wise</groupId>
                 <artifactId>wise-gwt-gui</artifactId>
+                <classifier>classes</classifier>
                 <version>${version.wise-gwt-gui}</version>
-                <type>war</type>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.google.gwt</groupId>
+                        <artifactId>gwt-servlet</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.wise</groupId>
+                <artifactId>wise-gwt-gui</artifactId>
+                <classifier>pages</classifier>
+                <version>${version.wise-gwt-gui}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.gwt</groupId>
+                <artifactId>gwt-servlet</artifactId>
+                <version>${version.wise-gwt-libs}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.wise</groupId>
+                <artifactId>wise-core</artifactId>
+                <version>${version.wise-core}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.jboss.ws</groupId>
+                        <artifactId>jbossws-common</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.jboss.ws</groupId>
+                        <artifactId>jbossws-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.jboss.ws</groupId>
+                        <artifactId>jbossws-spi</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.milyn</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.httpcomponents</groupId>
+                        <artifactId>httpclient</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>wsdl4j</groupId>
+                        <artifactId>wsdl4j</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.wise</groupId>
+                <artifactId>wise-core-cxf</artifactId>
+                <version>${version.wise-core}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.jboss.ws.cxf</groupId>
+                        <artifactId>jbossws-cxf-client</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -21,33 +21,18 @@
  */
 package org.wildfly.extension.wise;
 
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.ADD;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.CONTENT;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.DEPLOYMENT;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.ENABLED;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.PERSISTENT;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.URL;
-
-import java.net.URL;
-
-import org.jboss.as.controller.AbstractAddStepHandler;
+import org.jboss.as.controller.AbstractBoottimeAddStepHandler;
 import org.jboss.as.controller.OperationContext;
 import org.jboss.as.controller.OperationFailedException;
-import org.jboss.as.controller.OperationStepHandler;
-import org.jboss.as.controller.PathAddress;
-import org.jboss.as.controller.PathElement;
-import org.jboss.as.controller.operations.common.Util;
-import org.jboss.as.controller.registry.ImmutableManagementResourceRegistration;
 import org.jboss.as.controller.registry.Resource;
 import org.jboss.dmr.ModelNode;
-import org.jboss.modules.Module;
 
 /**
  * The "wise" subsystem add update handler.
  *
  * User: rsearls
  */
-class WiseSubsystemAdd extends AbstractAddStepHandler {
+class WiseSubsystemAdd extends AbstractBoottimeAddStepHandler {
 
    static final WiseSubsystemAdd INSTANCE = new WiseSubsystemAdd();
 
@@ -56,35 +41,12 @@ class WiseSubsystemAdd extends AbstractAddStepHandler {
                                 Resource resource) throws OperationFailedException {
 
       resource.getModel().setEmptyObject();
-
-      // Add a step to install the wise.war deployment
-      if (requiresRuntime(context)) {  // only add the step if we are going to actually deploy the war
-
-         PathAddress deploymentAddress = PathAddress.pathAddress(PathElement.pathElement(
-            DEPLOYMENT, "wise.war"));
-         ModelNode op = Util.createOperation(ADD, deploymentAddress);
-         op.get(ENABLED).set(true);
-         op.get(PERSISTENT).set(false); // prevents writing this deployment out to standalone.xml
-
-         Module module = Module.forClass(getClass());
-         URL url = module.getExportedResource("wise.war");
-         String urlString = url.toExternalForm();
-
-         ModelNode contentItem = new ModelNode();
-         contentItem.get(URL).set(urlString);
-
-         op.get(CONTENT).add(contentItem);
-
-         ImmutableManagementResourceRegistration rootResourceRegistration =
-            context.getRootResourceRegistration();
-         OperationStepHandler handler = rootResourceRegistration.getOperationHandler(
-            deploymentAddress, ADD);
-
-         context.addStep(op, handler, OperationContext.Stage.MODEL);
-      }
    }
 
-   protected boolean requiresRuntimeVerification() {
-      return false;
+   @Override
+   protected void performBoottime(OperationContext context, ModelNode operation, ModelNode model) throws OperationFailedException {
+//       Logger.getLogger(this.getClass()).info("**************** WISE STARTING *************************");
+       WiseGuiAppService.install(context.getServiceTarget());
    }
+
 }

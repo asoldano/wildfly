@@ -2778,7 +2778,24 @@
         <dependency>
             <groupId>org.jboss.wise</groupId>
             <artifactId>wise-gwt-gui</artifactId>
-            <type>war</type>
+            <classifier>classes</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.wise</groupId>
+            <artifactId>wise-gwt-gui</artifactId>
+            <classifier>pages</classifier>
+        </dependency>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-servlet</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.wise</groupId>
+            <artifactId>wise-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.wise</groupId>
+            <artifactId>wise-core-cxf</artifactId>
         </dependency>
     </dependencies>
 
